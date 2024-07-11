@@ -55,6 +55,27 @@ def list_items(handle):
     # End the directory listing
     xbmcplugin.endOfDirectory(handle)
 
+def play_audio_file(handle, url, title):
+    """
+    Play an audio file using the PAPlayer.
+    
+    Parameters:
+        handle (int): The unique identifier for the plugin instance.
+        url (str): The URL of the audio file to play.
+        title (str): The title of the audio file.
+    """
+    # Create a list item with the provided title
+    li = xbmcgui.ListItem(title)
+    
+    # Set the path for the list item to the URL of the audio file
+    li.setPath(url)
+    
+    # Set the info type to 'music' to ensure the correct player is used
+    li.setInfo('music', {'title': title})
+    
+    # Play the item using the PAPlayer
+    xbmc.Player(xbmc.PLAYER_CORE_PAPLAYER).play(url, li)
+
 # If this script is executed directly, call the main function
 if __name__ == '__main__':
     main()
