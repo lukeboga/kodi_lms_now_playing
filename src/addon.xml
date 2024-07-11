@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.klmsaddon" version="0.0.1" name="KLMS Addon" provider-name="LukeBM">
     <!--
     The addon element defines the core metadata for the KLMS Addon.
@@ -14,6 +13,12 @@
         - version: The version of the xbmc.python addon required. Version '3.0.0' is compatible with Kodi Nexus 20.5.
         -->
         <import addon="xbmc.python" version="3.0.0"/>
+        <!--
+        Adding the requests module as a dependency to ensure it is installed when the addon is installed.
+        - addon: The 'script.module.requests' package provides the requests library.
+        - version: The minimum version of the requests module required.
+        -->
+        <import addon="script.module.requests" version="2.25.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <!--
