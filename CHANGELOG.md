@@ -27,3 +27,6 @@
 
 ## 2024-07-11 13:25:51
 - Fixed default.py: Use InfoTagMusic for setting music properties to address deprecation warning
+
+## 2024-07-11 14:14:41
+- Fixed default.py: Ensure xbmc is imported
