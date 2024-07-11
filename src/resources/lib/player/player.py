@@ -9,8 +9,8 @@ def play():
     This function uses the xbmc.Player class to start playback of the currently selected media item.
     """
     try:
-        # Create a new player instance
-        player = xbmc.Player()
+        # Create a new player instance using PAPlayer
+        player = xbmc.Player(xbmc.PLAYER_CORE_PAPLAYER)
         # Start playback
         player.play()
         # Log the playback initiation
@@ -26,8 +26,8 @@ def stop():
     This function uses the xbmc.Player class to stop the currently playing media.
     """
     try:
-        # Create a new player instance
-        player = xbmc.Player()
+        # Create a new player instance using PAPlayer
+        player = xbmc.Player(xbmc.PLAYER_CORE_PAPLAYER)
         # Stop playback
         player.stop()
         # Log the playback stop
@@ -43,8 +43,8 @@ def pause():
     This function uses the xbmc.Player class to pause the currently playing media.
     """
     try:
-        # Create a new player instance
-        player = xbmc.Player()
+        # Create a new player instance using PAPlayer
+        player = xbmc.Player(xbmc.PLAYER_CORE_PAPLAYER)
         # Pause playback
         player.pause()
         # Log the playback pause
@@ -64,8 +64,8 @@ def get_current_state():
         dict: A dictionary containing the player's state information.
     """
     try:
-        # Create a new player instance
-        player = xbmc.Player()
+        # Create a new player instance using PAPlayer
+        player = xbmc.Player(xbmc.PLAYER_CORE_PAPLAYER)
         # Retrieve player state
         is_playing = player.isPlaying()
         # Log the player state
