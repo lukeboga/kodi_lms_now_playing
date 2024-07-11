@@ -5,7 +5,6 @@ import xbmcgui
 import sys
 from resources.lib.api.fetch_now_playing import get_now_playing
 from resources.lib.api.log_now_playing import log_now_playing
-from resources.lib.player import player
 from resources.lib.utils.log_message import log_message
 
 # Main entry point for the addon
@@ -20,8 +19,9 @@ def main():
     action = sys.argv[2] if len(sys.argv) > 2 else None
 
     # Check the action and call the appropriate function
-    if action == 'play':
-        player.play()
+    if action:
+        # Placeholder for future actions
+        pass
     else:
         # If no specific action is provided, display the 'now playing' information
         list_items(handle)
@@ -54,27 +54,6 @@ def list_items(handle):
         log_message("No 'now playing' information available.", xbmc.LOGWARNING)
     # End the directory listing
     xbmcplugin.endOfDirectory(handle)
-
-def play_audio_file(handle, url, title):
-    """
-    Play an audio file using the PAPlayer.
-    
-    Parameters:
-        handle (int): The unique identifier for the plugin instance.
-        url (str): The URL of the audio file to play.
-        title (str): The title of the audio file.
-    """
-    # Create a list item with the provided title
-    li = xbmcgui.ListItem(title)
-    
-    # Set the path for the list item to the URL of the audio file
-    li.setPath(url)
-    
-    # Set the info type to 'music' to ensure the correct player is used
-    li.setInfo('music', {'title': title})
-    
-    # Play the item using the PAPlayer
-    xbmc.Player(xbmc.PLAYER_CORE_PAPLAYER).play(url, li)
 
 # If this script is executed directly, call the main function
 if __name__ == '__main__':
