@@ -10,3 +10,7 @@
 - Added log_message.py: Utility function for logging messages
 - Added read_settings.py: Utility function to read addon settings
 - Added validate_ip.py: Utility function to validate IP address format
+
+## 2024-07-11 11:01:07
+- Updated addon.xml: Add script.module.requests dependency for LMS API requests
+- Added settings.xml: Define LMS configuration options with defaults
