@@ -1,22 +1,27 @@
+# Import necessary modules
 import xbmc
+from resources.lib.utils.log_message import log_message
 
 def format_time(seconds):
     """
-    Convert a time value in seconds to a formatted string (MM:SS).
+    Format a time duration in seconds into a string of the form H:MM:SS.
+    
+    This function converts a time duration given in seconds into a human-readable string format.
     
     Parameters:
-        seconds (int): The time value in seconds to be converted.
+        seconds (int): The time duration in seconds.
     
     Returns:
-        str: The formatted time string in MM:SS format.
+        str: The formatted time string.
     """
     try:
-        minutes = seconds // 60
-        remaining_seconds = seconds % 60
-        formatted_time = f"{minutes}:{remaining_seconds:02}"
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+        formatted_time = f"{hours}:{minutes:02}:{seconds:02}"
         return formatted_time
     except Exception as e:
-        # Log any errors encountered during the time formatting
-        xbmc.log(f"KLMS Addon: Error formatting time: {e}", level=xbmc.LOGERROR)
-        return "00:00"
+        # Log any errors encountered during time formatting
+        log_message(f"Error formatting time: {e}", xbmc.LOGERROR)
+        return "0:00:00"
 
