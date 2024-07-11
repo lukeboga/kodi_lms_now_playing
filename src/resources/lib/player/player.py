@@ -14,10 +14,10 @@ def play():
         # Start playback
         player.play()
         # Log the playback initiation
-        log_message("KLMS Addon: Playback started.")
+        log_message("Playback started.")
     except Exception as e:
         # Log any errors encountered during playback initiation
-        log_message(f"KLMS Addon: Error starting playback: {e}", xbmc.LOGERROR)
+        log_message(f"Error starting playback: {e}", xbmc.LOGERROR)
 
 def stop():
     """
@@ -31,10 +31,10 @@ def stop():
         # Stop playback
         player.stop()
         # Log the playback stop
-        log_message("KLMS Addon: Playback stopped.")
+        log_message("Playback stopped.")
     except Exception as e:
         # Log any errors encountered during playback stop
-        log_message(f"KLMS Addon: Error stopping playback: {e}", xbmc.LOGERROR)
+        log_message(f"Error stopping playback: {e}", xbmc.LOGERROR)
 
 def pause():
     """
@@ -48,10 +48,10 @@ def pause():
         # Pause playback
         player.pause()
         # Log the playback pause
-        log_message("KLMS Addon: Playback paused.")
+        log_message("Playback paused.")
     except Exception as e:
         # Log any errors encountered during playback pause
-        log_message(f"KLMS Addon: Error pausing playback: {e}", xbmc.LOGERROR)
+        log_message(f"Error pausing playback: {e}", xbmc.LOGERROR)
 
 def get_current_state():
     """
@@ -69,10 +69,10 @@ def get_current_state():
         # Retrieve player state
         is_playing = player.isPlaying()
         # Log the player state
-        log_message(f"KLMS Addon: Player is {'playing' if is_playing else 'not playing'}.")
+        log_message(f"Player is {'playing' if is_playing else 'not playing'}.")
         return {'is_playing': is_playing}
     except Exception as e:
         # Log any errors encountered during state retrieval
-        log_message(f"KLMS Addon: Error retrieving player state: {e}", xbmc.LOGERROR)
+        log_message(f"Error retrieving player state: {e}", xbmc.LOGERROR)
         return None
 
