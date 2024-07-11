@@ -1,4 +1,5 @@
 # Import necessary modules from the Kodi API and the custom libraries
+import xbmc
 import xbmcplugin
 import xbmcgui
 import sys
