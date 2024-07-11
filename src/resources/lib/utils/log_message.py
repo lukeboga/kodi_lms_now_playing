@@ -9,8 +9,8 @@ def log_message(message, level=xbmc.LOGINFO):
         level (int): The log level for the message. Default is xbmc.LOGINFO.
     """
     try:
-        xbmc.log(message, level=level)
+        xbmc.log(f"[KLMS Addon] {message}", level=level)
     except Exception as e:
         # Log any errors encountered during logging
-        xbmc.log(f"KLMS Addon: Error logging message: {e}", level=xbmc.LOGERROR)
+        xbmc.log(f"[KLMS Addon] [Error] {e}", level=xbmc.LOGERROR)
 
