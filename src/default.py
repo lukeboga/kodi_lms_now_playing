@@ -38,8 +38,13 @@ def list_items(handle):
     if now_playing:
         # Create a list item with the 'now playing' title
         li = xbmcgui.ListItem(now_playing['title'])
-        # Set additional information for the list item (e.g., artist, album)
-        li.setInfo('music', {'title': now_playing['title'], 'artist': now_playing['artist'], 'album': now_playing['album']})
+        
+        # Create an InfoTagMusic object and set music properties
+        info_tag = li.getMusicInfoTag()
+        info_tag.setTitle(now_playing['title'])
+        info_tag.setArtist(now_playing['artist'])
+        info_tag.setAlbum(now_playing['album'])
+        
         # Add the list item to the directory
         xbmcplugin.addDirectoryItem(handle, '', li, False)
         # Log the displayed information
