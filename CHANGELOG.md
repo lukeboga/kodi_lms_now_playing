@@ -30,3 +30,7 @@
 
 ## 2024-07-11 14:14:41
 - Fixed default.py: Ensure xbmc is imported
+
+## 2024-07-11 14:47:18
+- Fixed default.py: Ensure correct player (PAPlayer) is explicitly used for audio playback
+- Fixed player.py: Ensure correct player (PAPlayer) is explicitly used for playback control
