@@ -1,9 +1,13 @@
+# Import necessary modules
 import re
 import xbmc
+from resources.lib.utils.log_message import log_message
 
-def validate_ip(ip_address):
+def is_valid_ip(ip_address):
     """
-    Validate an IP address format.
+    Validate the given IP address.
+    
+    This function checks if the provided IP address is in a valid format using a regular expression.
     
     Parameters:
         ip_address (str): The IP address to validate.
@@ -11,10 +15,14 @@ def validate_ip(ip_address):
     Returns:
         bool: True if the IP address is valid, False otherwise.
     """
-    pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
-    if pattern.match(ip_address):
+    # Regular expression for validating an IP address
+    ip_pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+    
+    # Check if the IP address matches the pattern
+    if ip_pattern.match(ip_address):
         return True
     else:
-        xbmc.log(f"KLMS Addon: Invalid IP address format: {ip_address}", level=xbmc.LOGWARNING)
+        # Log a warning if the IP address is invalid
+        log_message(f"Invalid IP address format: {ip_address}", xbmc.LOGWARNING)
         return False
 
