@@ -4,7 +4,7 @@ from resources.lib.utils.log_message import log_message
 
 def play():
     """
-    Initiates playback on the Kodi player.
+    Initiates playback on the Kodi player using PAPlayer.
     
     This function uses the xbmc.Player class to start playback of the currently selected media item.
     """
@@ -21,7 +21,7 @@ def play():
 
 def stop():
     """
-    Stops playback on the Kodi player.
+    Stops playback on the Kodi player using PAPlayer.
     
     This function uses the xbmc.Player class to stop the currently playing media.
     """
@@ -38,7 +38,7 @@ def stop():
 
 def pause():
     """
-    Pauses playback on the Kodi player.
+    Pauses playback on the Kodi player using PAPlayer.
     
     This function uses the xbmc.Player class to pause the currently playing media.
     """
@@ -55,7 +55,7 @@ def pause():
 
 def get_current_state():
     """
-    Retrieves the current state of the Kodi player.
+    Retrieves the current state of the Kodi player using PAPlayer.
     
     This function uses the xbmc.Player class to get the state of the currently playing media,
     including information such as whether it is playing, paused, or stopped.
