@@ -1,6 +1,5 @@
 # Changelog
 
-
 ## 2024-07-11 08:31:29
 - Added addon.xml: Define core metadata for the KLMS Addon
 - Added default.py: Main script for handling addon core functionality
