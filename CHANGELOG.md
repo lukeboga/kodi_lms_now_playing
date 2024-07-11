@@ -14,3 +14,13 @@
 ## 2024-07-11 11:01:07
 - Updated addon.xml: Add script.module.requests dependency for LMS API requests
 - Added settings.xml: Define LMS configuration options with defaults
+
+## 2024-07-11 13:00:12
+- Updated fetch_now_playing.py: Replace xbmc.log with log_message
+- Updated log_now_playing.py: Replace xbmc.log with log_message
+- Updated player.py: Replace xbmc.log with log_message
+- Updated read_settings.py: Replace xbmc.log with log_message
+- Updated validate_ip.py: Replace xbmc.log with log_message
+- Updated default.py: Replace xbmc.log with log_message
+- Updated format_time.py: Replace xbmc.log with log_message
+- Updated log_message.py: Include '[KLMS Addon]' prefix
