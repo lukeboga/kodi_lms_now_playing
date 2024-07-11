@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+The settings element contains all configuration options for the addon.
+-->
+<settings>
+    <!--
+    The category element defines a grouping for related settings.
+    - label: The display name for the category in the Kodi settings interface.
+    -->
+    <category label="General">
+        <!--
+        The setting element defines a configurable option.
+        - id: A unique identifier for the setting.
+        - type: The type of input expected (e.g., text, number).
+        - label: The display name for the setting, prefixed with "LMS: " for clarity.
+        - default: The default value for the setting.
+        -->
+        <setting id="lms_server" type="text" label="LMS: Server Address" default="192.168.1.201"/>
+        
+        <!--
+        A setting for the LMS port number.
+        - id: A unique identifier for the setting.
+        - type: Specifies the input type, here it is a number.
+        - label: Display name for the setting.
+        - default: Default port value.
+        -->
+        <setting id="lms_port" type="number" label="LMS: Port" default="9000"/>
+        
+        <!--
+        A setting for the LMS player ID.
+        - id: A unique identifier for the setting.
+        - type: The type of input expected, here it is a text.
+        - label: Display name for the setting.
+        - default: Default player ID value.
+        -->
+        <setting id="lms_player_id" type="text" label="LMS: Player ID" default="ab:7a:56:8b:fd:0f"/>
+    </category>
+</settings>
+
