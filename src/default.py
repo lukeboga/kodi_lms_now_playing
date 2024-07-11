@@ -1,14 +1,11 @@
 # Import necessary modules from the Kodi API and the custom libraries
-import xbmc
 import xbmcplugin
 import xbmcgui
 import sys
-from resources.lib.api import lms_api
+from resources.lib.api.fetch_now_playing import get_now_playing
+from resources.lib.api.log_now_playing import log_now_playing
 from resources.lib.player import player
 from resources.lib.utils.log_message import log_message
-from resources.lib.utils.read_settings import read_settings
-from resources.lib.utils.validate_ip import validate_ip
-from resources.lib.utils.format_time import format_time
 
 # Main entry point for the addon
 def main():
@@ -37,7 +34,7 @@ def list_items(handle):
         handle (int): The unique identifier for the plugin instance.
     """
     # Retrieve the current 'now playing' information from LMS
-    now_playing = lms_api.get_now_playing()
+    now_playing = get_now_playing()
     if now_playing:
         # Create a list item with the 'now playing' title
         li = xbmcgui.ListItem(now_playing['title'])
@@ -46,7 +43,7 @@ def list_items(handle):
         # Add the list item to the directory
         xbmcplugin.addDirectoryItem(handle, '', li, False)
         # Log the displayed information
-        log_message(f"Displayed Now Playing: {now_playing['title']} by {now_playing['artist']} from the album {now_playing['album']}")
+        log_now_playing(now_playing)
     else:
         log_message("No 'now playing' information available.", xbmc.LOGWARNING)
     # End the directory listing
