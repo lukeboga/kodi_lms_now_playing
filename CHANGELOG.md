@@ -24,3 +24,6 @@
 - Updated default.py: Replace xbmc.log with log_message
 - Updated format_time.py: Replace xbmc.log with log_message
 - Updated log_message.py: Include '[KLMS Addon]' prefix
+
+## 2024-07-11 13:25:51
+- Fixed default.py: Use InfoTagMusic for setting music properties to address deprecation warning
