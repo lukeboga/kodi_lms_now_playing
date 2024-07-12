@@ -1,46 +1,41 @@
-<addon id="plugin.audio.klmsaddon" version="0.0.1" name="KLMS Addon" provider-name="LukeBM">
-    <!--
-    The addon element defines the core metadata for the KLMS Addon.
-    - id: A unique identifier for the addon. 'plugin.audio.klmsaddon' indicates that this is an audio plugin named 'klmsaddon'.
-    - version: The version of the addon. Starting at '0.0.1' for the initial development phase.
-    - name: The name of the addon, displayed in the Kodi interface.
-    - provider-name: The author or provider of the addon.
+<!-- 
+    Define the addon with a unique identifier, name, version, and provider name.
+    The extension point is set to 'xbmc.python.script' to indicate a program addon.
+-->
+<addon id="plugin.program.klmsaddon" name="KLMS Addon" version="0.0.1" provider-name="LukeBM" extension point="xbmc.python.script">
+
+    <!-- 
+        Specify the required dependencies for the addon.
+        This section ensures that the necessary modules are available for the addon to function correctly.
     -->
     <requires>
-        <!--
-        The requires element specifies the dependencies for the addon.
-        - import addon: The 'xbmc.python' addon is required for running Python scripts within Kodi.
-        - version: The version of the xbmc.python addon required. Version '3.0.0' is compatible with Kodi Nexus 20.5.
-        -->
+        <!-- Import the core Python module for Kodi addon development -->
         <import addon="xbmc.python" version="3.0.0"/>
-        <!--
-        Adding the requests module as a dependency to ensure it is installed when the addon is installed.
-        - addon: The 'script.module.requests' package provides the requests library.
-        - version: The minimum version of the requests module required.
-        -->
+        <!-- Import the requests module for making HTTP requests -->
         <import addon="script.module.requests" version="2.25.1"/>
     </requires>
-    <extension point="xbmc.python.pluginsource" library="default.py">
-        <!--
-        The extension element defines the entry point for the addon.
-        - point: The type of extension. 'xbmc.python.pluginsource' indicates a Python plugin source.
-        - library: The main script file for the addon, which will be 'default.py'.
-        -->
-        <provides>audio</provides>
-        <!--
-        The provides element specifies the type of content the addon handles. In this case, it is an 'audio' plugin.
-        -->
+
+    <!-- 
+        Define the script extension point for the addon.
+        This specifies the main Python script that will be executed when the addon is run.
+        The 'provides' tag indicates that this addon offers program functionality.
+    -->
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>program</provides>
     </extension>
+
+    <!-- 
+        Provide metadata about the addon.
+        This includes a summary, a detailed description, and the platforms on which the addon can run.
+    -->
     <extension point="xbmc.addon.metadata">
-        <!--
-        The metadata for the addon, providing additional descriptive information.
-        - summary: A brief summary of the addon. 'lang' attribute specifies the language (English).
-        - description: A detailed description of the addon's functionality.
-        - platform: Specifies the platforms the addon is compatible with. 'all' indicates compatibility with all platforms supported by Kodi.
-        -->
-        <summary lang="en">KLMS Addon</summary>
-        <description lang="en">This add-on fetches and displays now playing information from a Logitech Media Server.</description>
+        <!-- Brief summary of the addon -->
+        <summary>KLMS Addon for Logitech Media Server</summary>
+        <!-- Detailed description of the addon's functionality -->
+        <description>Fetch and display 'now playing' information from LMS.</description>
+        <!-- Platform compatibility -->
         <platform>all</platform>
     </extension>
+
 </addon>
 
