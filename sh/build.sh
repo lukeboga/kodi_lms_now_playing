@@ -9,7 +9,7 @@ timestamp=$(date +"%Y-%m-%d-%H%M%S")
 addon_name="klms-addon-$version-$timestamp"
 temp_build_dir="$dest_dir/$addon_name"
 zip_name="$addon_name.zip"
-kodi_dir="$home_dir/Music"
+kodi_dir="$home_dir/_Tmp"
 
 echo "Building zip file for Kodi..."
 mkdir $temp_build_dir
