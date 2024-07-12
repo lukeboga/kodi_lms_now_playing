@@ -36,3 +36,7 @@
 - Extracted list_items function into ui.py
 - Updated default.py to use extracted functions from initialization.py and ui.py
 - Updated addon.xml: Convert to program addon
+
+## 2024-07-12 09:20:46
+- Updated ui.py: Replace music-specific methods with generic methods and add detailed comments for program addon compatibility
+- Updated default.py: Add detailed comments for each function and section
