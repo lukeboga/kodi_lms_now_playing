@@ -1,6 +1,6 @@
 # Import necessary modules
 import xbmc
-from resources.lib.utils.log_message import log_message
+from ..utils.log_message import log_message
 
 def log_now_playing(data):
     """

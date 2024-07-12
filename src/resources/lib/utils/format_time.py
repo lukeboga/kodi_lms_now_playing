@@ -1,6 +1,6 @@
 # Import necessary modules
 import xbmc
-from resources.lib.utils.log_message import log_message
+from .log_message import log_message
 
 def format_time(seconds):
     """

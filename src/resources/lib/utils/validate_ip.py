@@ -1,7 +1,7 @@
 # Import necessary modules
 import re
 import xbmc
-from resources.lib.utils.log_message import log_message
+from .log_message import log_message
 
 def is_valid_ip(ip_address):
     """

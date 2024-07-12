@@ -1,7 +1,7 @@
 # Import necessary modules from the custom libraries and Kodi API
 import xbmc
-from resources.lib.utils.log_message import log_message
-from resources.lib.utils.read_settings import read_settings
+from .log_message import log_message
+from .read_settings import read_settings
 
 def initialize():
     """

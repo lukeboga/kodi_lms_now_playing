@@ -1,6 +1,6 @@
 import requests
 import xbmc
-from resources.lib.utils.log_message import log_message
+from ..utils.log_message import log_message
 
 LMS_URL = "http://192.168.1.201:9000/jsonrpc.js"
 PLAYER_ID = "ab:7a:56:8b:fd:0f"
