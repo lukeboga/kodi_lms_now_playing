@@ -1,7 +1,6 @@
-# Import necessary modules from the Kodi API and the custom libraries
-import xbmcgui  # Module for creating GUI elements in Kodi
-import xbmcplugin  # Module for managing plugin behavior in Kodi
-import xbmc  # Module for Kodi logging and other functionalities
+import xbmcgui
+import xbmcplugin
+import xbmc
 from resources.lib.api.fetch_now_playing import get_now_playing  # Custom function to fetch 'now playing' data from LMS
 from resources.lib.api.log_now_playing import log_now_playing  # Custom function to log 'now playing' data
 from resources.lib.utils.log_message import log_message  # Custom function for logging messages
