@@ -1,6 +1,6 @@
-# Import necessary modules from the custom libraries and Kodi API
-import xbmc
+import xbmc  # Kodi API module for logging
 from resources.lib.utils.log_message import log_message
+from resources.lib.api.fetch_now_playing import requests_session
 from resources.lib.utils.read_settings import read_settings
 
 def initialize():
@@ -19,6 +19,10 @@ def on_shutdown():
     Close any open connections and clean up resources.
     """
     log_message("Shutting down KLMS Addon.", xbmc.LOGINFO)
-    # Add any other shutdown steps here
+
+    # Close the requests session
+    if requests_session:
+        requests_session.close()
+
     log_message("Shutdown complete.", xbmc.LOGINFO)
 

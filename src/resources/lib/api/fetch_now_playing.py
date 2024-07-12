@@ -2,6 +2,9 @@ import requests
 import xbmc
 from resources.lib.utils.read_settings import read_settings
 
+# Create a global session object
+requests_session = requests.Session()
+
 def get_now_playing():
     """
     Fetch the currently playing track information from the Logitech Media Server (LMS) using JSON-RPC.
@@ -23,7 +26,7 @@ def get_now_playing():
 
     try:
         # Make the API request to the LMS
-        response = requests.post(url, json=payload, headers={"Content-Type": "application/json"})
+        response = requests_session.post(url, json=payload, headers={"Content-Type": "application/json"})
         response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
         data = response.json()  # Parse the JSON response
 

@@ -1,8 +1,9 @@
 import xbmc
 import xbmcaddon
 from resources.lib.utils.log_message import log_message
-from resources.lib.utils.initialization import initialize, on_shutdown 
+from resources.lib.utils.initialization import initialize
 from resources.lib.ui.now_playing import NowPlaying
+from resources.lib.utils.custom_monitor import AddonMonitor  # Import the custom monitor
 
 def main():
     """
@@ -23,12 +24,16 @@ if __name__ == '__main__':
     try:
         # Initialize the addon, loading settings and establishing necessary connections
         initialize()
+        # Create and initialize the custom monitor
+        monitor = AddonMonitor()
         # Call the main function to execute the addon's primary functionality
         main()
+        # Wait for abort (exit) request
+        monitor.waitForAbort()
     except Exception as e:
         # Log any exceptions that occur during execution for debugging purposes
         log_message(f"Error in main: {e}", xbmc.LOGERROR)
     finally:
         # Ensure the addon shuts down cleanly, closing any open connections and cleaning up resources
-        on_shutdown()
+        monitor.onAbortRequested()
 
