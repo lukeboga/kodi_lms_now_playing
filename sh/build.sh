@@ -1,9 +1,20 @@
 #!/bin/bash
 
+dest_sub_dir=""
+
+case "$1" in
+  "working")
+    dest_sub_dir="working"
+    ;;
+  *)
+    dest_sub_dir="test"
+    ;;
+esac
+
 home_dir="/home/n4lbm"
 root_dir="$home_dir/Development/Kodi/kodi_lms_now_playing"
 src_dir="$root_dir/src"
-dest_dir="$root_dir/dest"
+dest_dir="$root_dir/dest/$dest_sub_dir"
 version="v0.0.1"
 timestamp=$(date +"%Y-%m-%d-%H.%M.%S")
 addon_name="klms-addon-$version-$timestamp"
