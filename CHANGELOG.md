@@ -31,7 +31,6 @@
 ## 2024-07-11 14:14:41
 - Fixed default.py: Ensure xbmc is imported
 
-
 ## 2024-07-12 08:48:34
 - Extracted initialization and shutdown functions into initialization.py
 - Extracted list_items function into ui.py
