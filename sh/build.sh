@@ -17,6 +17,7 @@ cp -r $src_dir/* $temp_build_dir
 cd $dest_dir
 zip -r $zip_name $addon_name
 rm -r $addon_name
+rm -r "$kodi_dir"/*.zip
 cp $zip_name $kodi_dir
 cd $root_dir
 echo "Build complete!"
