@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <window id="1100">
-    <defaultcontrol>1</defaultcontrol>
+    <!-- <defaultcontrol>1</defaultcontrol> -->
     <controls>
         <control type="label" id="1">
             <visible>true</visible>

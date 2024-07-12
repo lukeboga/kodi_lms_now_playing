@@ -1,4 +1,3 @@
-# Import necessary modules
 import xbmc
 from resources.lib.utils.log_message import log_message
 
