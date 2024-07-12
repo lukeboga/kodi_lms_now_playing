@@ -2,7 +2,7 @@
     Define the addon with a unique identifier, name, version, and provider name.
     The extension point is set to 'xbmc.python.script' to indicate a program addon.
 -->
-<addon id="plugin.program.klmsaddon" name="KLMS Addon" version="0.0.1" provider-name="LukeBM" extension point="xbmc.python.script">
+<addon id="plugin.program.klmsaddon" name="KLMS Addon" version="0.0.1" provider-name="LukeBM" extension="xbmc.python.script">
 
     <!-- 
         Specify the required dependencies for the addon.
