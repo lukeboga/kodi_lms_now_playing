@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <window id="1100">
-    <!-- <defaultcontrol>1</defaultcontrol> -->
+    <defaultcontrol>1</defaultcontrol>
     <controls>
         <control type="label" id="1">
             <visible>true</visible>
             <label>Now Playing...</label>
             <textcolor>FFB2D4F5</textcolor>
+        </control>
+        <control type="label" id="2">
+            <visible>true</visible>
+            <position>50,50</position>  <!-- Position the label appropriately -->
+            <size>600,50</size>  <!-- Set size of the label -->
+            <label>Track Title</label>  <!-- Placeholder text -->
+            <textcolor>FFFFFFFF</textcolor>  <!-- White text color -->
+            <font>font13</font>  <!-- Set the font size -->
         </control>
     </controls>
 </window>

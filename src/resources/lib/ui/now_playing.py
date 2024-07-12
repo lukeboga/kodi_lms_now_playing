@@ -9,13 +9,19 @@ class NowPlaying(xbmcgui.WindowXML):
         super().__init__(*args, **kwargs)
 
     def onInit(self):
+        """
+        Called when the window is initialized.
+        Fetches and displays 'now playing' information.
+        """
         now_playing = get_now_playing()
-
         if now_playing:
             log_now_playing(now_playing)
+            # Update the label with the track title
+            self.getControl(2).setLabel(now_playing['title'])
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
-        pass
+            # Display a default message if no 'now playing' information is available
+            self.getControl(2).setLabel("No 'now playing' information available.")
 
     def onClick(self, controlId):
         pass
