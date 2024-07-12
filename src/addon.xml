@@ -20,7 +20,7 @@
         This specifies the main Python script that will be executed when the addon is run.
         The 'provides' tag indicates that this addon offers program functionality.
     -->
-    <extension point="xbmc.python.script" library="resources/lib/default.py">
+    <extension point="xbmc.python.script" library="default.py">
         <provides>program</provides>
     </extension>
 
