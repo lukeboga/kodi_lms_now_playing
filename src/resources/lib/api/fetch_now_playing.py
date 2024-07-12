@@ -1,50 +1,54 @@
-# Import necessary modules
 import requests
 import xbmc
-from resources.lib.utils.read_settings import read_settings
 from resources.lib.utils.log_message import log_message
+
+LMS_URL = "http://192.168.1.201:9000/jsonrpc.js"
+PLAYER_ID = "ab:7a:56:8b:fd:0f"
+PAYLOAD = {
+    "id": 1,
+    "method": "slim.request",
+    "params": [PLAYER_ID, ["status", "-"]]
+}
 
 def get_now_playing():
     """
-    Fetch the currently playing track information from the Logitech Media Server (LMS) using JSON-RPC.
-    
-    This function makes an HTTP POST request to the LMS to retrieve the current track information.
-    It handles potential errors and logs the 'now playing' data to the Kodi log.
+    Fetch the current 'now playing' information from the LMS server.
     
     Returns:
-        dict: A dictionary containing the track title, artist, album, duration, and current playback time.
+        dict: Parsed JSON data from the LMS server containing 'now playing' information.
     """
-    # Retrieve LMS settings
-    settings = read_settings()
-    url = f"http://{settings['lms_server']}:{settings['lms_port']}/jsonrpc.js"
-    payload = {
-        "method": "slim.request",
-        "params": [settings['lms_player_id'], ["status", "-", 10, "tags:adKl"]],
-        "id": 1
-    }
-
     try:
-        # Make the API request to the LMS
-        response = requests.post(url, json=payload, headers={"Content-Type": "application/json"})
-        response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
-        data = response.json()  # Parse the JSON response
-
-        # Extract relevant 'now playing' information
-        now_playing = {
-            'title': data['result']['playlist_loop'][0]['title'],
-            'artist': data['result']['playlist_loop'][0]['artist'],
-            'album': data['result']['playlist_loop'][0]['album'],
-            'duration': data['result']['playlist_loop'][0]['duration'],
-            'time': data['result']['time']
-        }
-
-        return now_playing
-    except requests.RequestException as e:
-        # Log any errors encountered during the API request
+        # Send a POST request to the LMS server
+        response = requests.post(LMS_URL, json=PAYLOAD)
+        # Parse the JSON response
+        data = response.json()
+        # Log the entire raw JSON response for debugging
+        log_message(f"Raw Now Playing Data: {data}", xbmc.LOGDEBUG)
+        
+        # Extract relevant data for 'now playing' information
+        result = data.get("result", {})
+        if "playlist_loop" in result and len(result["playlist_loop"]) > 0:
+            now_playing = {
+                "title": result["playlist_loop"][0].get("title", "Unknown Title"),
+                "artist": result.get("remoteMeta", {}).get("title", "Unknown Artist"),
+                "album": result.get("current_title", "Unknown Album"),
+                "time": result.get("time", 0)
+            }
+            # Format the extracted 'now playing' data for readable logging
+            formatted_now_playing = (
+                f"Now Playing Information:\n"
+                f"Title: {now_playing['title']}\n"
+                f"Artist: {now_playing['artist']}\n"
+                f"Album: {now_playing['album']}\n"
+                f"Time: {now_playing['time']}\n"
+            )
+            # Log the formatted 'now playing' data for debugging
+            log_message(formatted_now_playing, xbmc.LOGDEBUG)
+            return now_playing
+        else:
+            log_message("No playlist_loop data available.", xbmc.LOGWARNING)
+            return None
+    except Exception as e:
         log_message(f"Error fetching now playing: {e}", xbmc.LOGERROR)
-        return None
-    except (KeyError, IndexError) as e:
-        # Log any errors encountered during data extraction
-        log_message(f"Error processing now playing data: {e}", xbmc.LOGERROR)
         return None
 

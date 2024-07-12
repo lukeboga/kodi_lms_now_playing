@@ -3,28 +3,22 @@ import xbmcplugin  # Module for managing plugin behavior in Kodi
 import xbmcgui  # Module for creating GUI elements in Kodi
 import sys  # Module for interacting with the Python runtime environment
 import xbmc  # Module for Kodi logging and other functionalities
+import xbmcaddon
 from resources.lib.ui.ui import list_items  # Custom function to list 'now playing' items
 from resources.lib.player import player  # Custom player control functions
 from resources.lib.utils.log_message import log_message  # Custom function for logging messages
 from resources.lib.utils.initialization import initialize, on_shutdown  # Custom functions for initialization and shutdown
+from resources.lib.ui.hello_world import HelloWorldWindow
 
 def main():
     """
     Main entry point for the addon.
     This function determines the action to take based on the arguments passed to the script.
     """
-    # Handle is a unique identifier for the plugin instance, provided by Kodi when the addon is invoked
-    handle = int(sys.argv[1])
-    # Action specifies the operation to perform (e.g., 'play'), passed as a command-line argument
-    action = sys.argv[2] if len(sys.argv) > 2 else None
-
-    # Check the action and call the appropriate function
-    if action == 'play':
-        # If the action is 'play', call the player.play() function to start playback
-        player.play()
-    else:
-        # If no specific action is provided, list the 'now playing' items in the Kodi interface
-        list_items(handle)
+    addon = xbmcaddon.Addon()
+    window = HelloWorldWindow("HelloWorld.xml", addon.getAddonInfo('path'))
+    window.doModal()
+    del window
 
 if __name__ == '__main__':
     """

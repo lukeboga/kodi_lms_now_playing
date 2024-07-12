@@ -19,16 +19,7 @@ def list_items(handle):
     # Check if 'now playing' data is available
     if now_playing:
         # Create a new ListItem object with the title of the currently playing track
-        li = xbmcgui.ListItem(now_playing['title'])
-        
-        # Set generic info for the ListItem
-        # setInfo(type, infoLabels) sets various metadata information for the list item
-        # 'video' type is used here to ensure compatibility with program addons
-        li.setInfo('video', {
-            'title': now_playing['title'],  # Title of the currently playing track
-            'genre': now_playing['artist'],  # Artist is mapped to genre for compatibility
-            'plot': now_playing['album']  # Album is mapped to plot for compatibility
-        })
+        li = xbmcgui.ListItem('Hello, World!')
         
         # Add the ListItem to the directory
         # addDirectoryItem(handle, url, listitem, isFolder) adds a list item to the directory
