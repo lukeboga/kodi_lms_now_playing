@@ -1,9 +1,8 @@
-# Import necessary modules from the Kodi API and the custom libraries
 import xbmc
 import xbmcaddon
-from .utils.log_message import log_message
-from .utils.initialization import initialize, on_shutdown 
-from .ui.now_playing import NowPlaying
+from resources.lib.utils.log_message import log_message
+from resources.lib.utils.initialization import initialize, on_shutdown 
+from resources.lib.ui.now_playing import NowPlaying
 
 def main():
     """

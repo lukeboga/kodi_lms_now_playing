@@ -1,6 +1,6 @@
 # Import necessary modules from the Kodi API
 import xbmc
-from ..utils.log_message import log_message
+from resources.lib.utils.log_message import log_message
 
 def play():
     """
