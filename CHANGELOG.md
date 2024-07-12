@@ -24,6 +24,7 @@
 - Updated default.py: Replace xbmc.log with log_message
 - Updated format_time.py: Replace xbmc.log with log_message
 - Updated log_message.py: Include '[KLMS Addon]' prefix
+<<<<<<< HEAD
 
 ## 2024-07-11 13:25:51
 - Fixed default.py: Use InfoTagMusic for setting music properties to address deprecation warning
@@ -39,3 +40,5 @@
 - Updated default.py: Ensure PAPlayer is explicitly used for audio playback, remove unnecessary DVD references
 - Updated player.py: Ensure PAPlayer is explicitly used for playback control, remove unnecessary DVD references
 - Note: The error persists despite these updates
+=======
+>>>>>>> parent of 8851284 (Update CHANGELOG.md: Address deprecation warning by using InfoTagMusic in default.py)
