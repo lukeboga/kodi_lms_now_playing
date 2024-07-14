@@ -2,30 +2,68 @@
 <window>
     <controls>
         <control type="group">
-            <width>400</width>
-            <height>50</height>
-            <left>100</left>
-            <top>100</top>
-            <control type="image" id="2">
-                <texture border="4">special://home/addons/plugin.program.klmsaddon/resources/media/col-white.png</texture>
-                <visible>true</visible>
-            </control>
-            <control type="label" id="1">
-                <label>(002) Lorem ipsum dolor sit amet, qui minim labore adipisicing minim</label>
-                <scroll>true</scroll>
-                <wrapmultiline>true</wrapmultiline>
-                <align>center</align>
-                <aligny>center</aligny>
-                <textcolor>0xFF000000</textcolor>
-                <font>font13</font>
-                <visible>true</visible>
+            
+            <!-- Background -->
+            <control type="group">
+                <!-- Image -->
+                <control type="image">
+                    <aspectratio>scale</aspectratio> 
+                    <texture>special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg</texture>
+                </control>
+                <!-- Overlay -->
+                <control type="image">
+                    <texture>special://home/addons/plugin.program.klmsaddon/resources/media/black-90.png</texture>
+                </control>      
             </control>
 
-        </control>
-        <control type="label" id="999">
-            <textcolor>0xFFFFFFFF</textcolor>
-            <font>font13</font>
-            <visible>true</visible>
+            <!-- Now playing -->
+            <control type="group">
+                <width>500</width>
+                <height>600</height>
+                <left>70</left>
+                <top>70</top>
+                <aligny>center</aligny>
+
+                <!-- Cover -->
+                <control type="image">
+                    <left>0</left>
+                    <top>0</top>
+                    <width>500</width>
+                    <height>500</height>
+                    <texture>special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg</texture>
+                </control>      
+
+                <!-- Track -->
+                <control type="group">
+                    <width>400</width>
+                    <height>25</height>
+                    <top>505</top>
+                    <left>50</left>
+                    <textcolor>30FFFFFF</textcolor>
+                    <visible>true</visible>
+                    <font>font13</font>
+
+                    <!-- Title -->
+                    <control type="label" id="np_title">
+                        <font>font30_title</font>
+                        <scroll>true</scroll>
+                        <align>center</align>
+                        <label>Lorem ipsum dolor sit amet (dipisicing minim)</label>
+                    </control>
+                    <!-- Album  -->
+                    <control type="label" id="np_album">
+                        <align>center</align>
+                        <top>30</top>
+                        <label>Dolor sit amet lorem</label>
+                    </control>
+                    <!-- Artist -->
+                    <control type="label" id="np_artist">
+                        <align>center</align>
+                        <top>60</top>
+                        <label>Qui minim labore</label>
+                    </control>
+                </control>
+            </control>
         </control>
     </controls>
 </window>

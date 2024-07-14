@@ -26,10 +26,8 @@ class NowPlaying(xbmcgui.WindowXML):
         VW_50 = round(VW * 0.5)
         VH_50 = round(VH * 0.5)
         
-        self.Meta = self.getControl(999);
-        self.Meta.setLabel(f"{WINDOW_ID}");
         
-        self.TrackTitle = self.getControl(1);
+        self.TrackTitle = self.getControl("track_title");
         self.TrackTitle_width = self.TrackTitle.getWidth();
         self.TrackTitle_height = self.TrackTitle.getHeight();
         
