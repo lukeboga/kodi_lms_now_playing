@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<window id="1100">
-    <defaultcontrol>1</defaultcontrol>
+<window>
     <controls>
-        <control type="label" id="1">
+        <control type="image" id="2">
+            <width>200</width>
+            <height>100</height>
+            <left>100</left>
+            <top>100</top>
+            <texture border="4">special://home/addons/plugin.program.klmsaddon/resources/media/col-white.png</texture>
             <visible>true</visible>
-            <label>Now Playing...</label>
-            <textcolor>FFB2D4F5</textcolor>
         </control>
-        <control type="label" id="2">
+        <control type="label" id="1">
+            <label>(002) Lorem ipsum dolor sit amet, qui minim labore adipisicing minim</label>
+            <width>200</width>
+            <scroll>false</scroll>
+            <wrapmultiline>true</wrapmultiline>
+            <height>100</height>
+            <left>100</left>
+            <top>100</top>
+            <align>center</align>
+            <aligny>center</aligny>
+            <textcolor>0xFF000000</textcolor>
+            <font>font13</font>
             <visible>true</visible>
-            <position>50,50</position>  <!-- Position the label appropriately -->
-            <size>600,50</size>  <!-- Set size of the label -->
-            <label>Track Title</label>  <!-- Placeholder text -->
-            <textcolor>FFFFFFFF</textcolor>  <!-- White text color -->
-            <font>font13</font>  <!-- Set the font size -->
+        </control>
+        <control type="label" id="999">
+            <textcolor>0xFFFFFFFF</textcolor>
+            <font>font13</font>
+            <visible>true</visible>
         </control>
     </controls>
 </window>
