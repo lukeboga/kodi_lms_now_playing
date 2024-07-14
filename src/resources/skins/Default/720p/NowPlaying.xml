@@ -50,12 +50,14 @@
                         <align>center</align>
                         <label>Lorem ipsum dolor sit amet (dipisicing minim)</label>
                     </control>
+                    
                     <!-- Album  -->
                     <control type="label" id="np_album">
                         <align>center</align>
                         <top>30</top>
                         <label>Dolor sit amet lorem</label>
                     </control>
+                    
                     <!-- Artist -->
                     <control type="label" id="np_artist">
                         <align>center</align>
