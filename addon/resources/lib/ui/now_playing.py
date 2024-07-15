@@ -18,11 +18,15 @@ class NowPlaying(xbmcgui.WindowXML):
         self.init_elems()
 
     def init_elems(self):
-        self.now_playing_title = self.getControl(1)
-        self.now_playing_album = self.getControl(2)
-        self.now_playing_artist = self.getControl(3)
-        self.playlist = self.getControl(4)
+        # Initialize controls
+        self.artwork_background = self.getControl(1)
+        self.artwork = self.getControl(2)
+        self.now_playing_title = self.getControl(3)
+        self.now_playing_album = self.getControl(4)
+        self.now_playing_artist = self.getControl(5)
+        self.playlist = self.getControl(6)
 
+        # Populate UI elements
         self.populate_now_playing()
         self.populate_playlist()
 
@@ -37,18 +41,34 @@ class NowPlaying(xbmcgui.WindowXML):
             self.now_playing_title.setLabel(now_playing_data['title'])
             self.now_playing_album.setLabel(now_playing_data['album'])
             self.now_playing_artist.setLabel(now_playing_data['artist'])
+
+            # Update the artwork images
+            artwork_url = now_playing_data.get('artwork_url', 'special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg')
+            self.artwork_background.setImage(artwork_url)
+            self.artwork.setImage(artwork_url)
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
             # Clear the labels if no data is available
-            self.now_playing_title.setLabel("Title")
-            self.now_playing_album.setLabel("Album")
-            self.now_playing_artist.setLabel("Artist")
+            self.now_playing_title.setLabel("")
+            self.now_playing_album.setLabel("")
+            self.now_playing_artist.setLabel("")
+            # Set default artwork
+            default_artwork = 'special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg'
+            self.artwork_background.setImage(default_artwork)
+            self.artwork.setImage(default_artwork)
 
     def populate_playlist(self):
         playlist_data = get_playlist(self.lms_data)
         
         if playlist_data:
-            pass
+            # Update playlist items
+            playlist_items = [
+                xbmcgui.ListItem(label=f"{item['title']} by {item['artist']} from {item['album']}") 
+                for item in playlist_data
+            ]
+            self.playlist.reset()
+            for item in playlist_items:
+                self.playlist.addItem(item)
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
     

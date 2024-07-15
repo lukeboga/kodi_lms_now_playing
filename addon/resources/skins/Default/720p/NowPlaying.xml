@@ -11,7 +11,7 @@
             -->
             <control type="group">
                 <!-- Image -->
-                <control type="image">
+                <control type="image"  id="1">
                     <aspectratio>scale</aspectratio> 
                     <texture>special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg</texture>
                 </control>
@@ -33,7 +33,7 @@
                 <width>500</width>
 
                 <!-- Cover -->
-                <control type="image">
+                <control type="image" id="2">
                     <height>500</height>
                     <left>0</left>
                     <top>0</top>
@@ -53,7 +53,7 @@
                     <width>400</width>
 
                     <!-- Title -->
-                    <control type="label" id="1">
+                    <control type="label" id="3">
                         <align>center</align>
                         <font>font30_title</font>
                         <scroll>true</scroll>
@@ -62,7 +62,7 @@
                     </control>
                     
                     <!-- Album  -->
-                    <control type="label" id="2">
+                    <control type="label" id="4">
                         <align>center</align>
                         <top>30</top>
                         
@@ -70,7 +70,7 @@
                     </control>
                     
                     <!-- Artist -->
-                    <control type="label" id="3">
+                    <control type="label" id="5">
                         <align>center</align>
                         <top>60</top>
                         
@@ -90,7 +90,7 @@
                 <top>70</top>
                 <width>500</width>
 
-                <control type="list" id="4">
+                <control type="list" id="6">
                     <height>600</height>
                     <left>70</left>
                     <width>500</width>
