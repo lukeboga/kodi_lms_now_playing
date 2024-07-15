@@ -27,21 +27,10 @@ class NowPlaying(xbmcgui.WindowXML):
         VH_50 = round(VH * 0.5)
         
         
-        self.TrackTitle = self.getControl("track_title");
-        self.TrackTitle_width = self.TrackTitle.getWidth();
-        self.TrackTitle_height = self.TrackTitle.getHeight();
-        
-        # self.TrackTitle.setPosition(10, 10)
+        self.now_playing_title = self.getControl(1)
+        self.now_playing_album = self.getControl(2)
+        self.now_playing_artist = self.getControl(3)
 
-        log_message(f"{self.TrackTitle_width} x {self.TrackTitle_height}")
-        
-
-    def get_elem_size(self, elem):
-        width = elem.getWidth()
-        height = elem.getheight()
-
-        return { width, height }
-        
     def set_now_playing(self):
         now_playing = get_now_playing()
         if now_playing:

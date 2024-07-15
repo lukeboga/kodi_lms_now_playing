@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<window>
+<window id="1155">
+    <backgroundcolor>0</backgroundcolor>
     <controls>
         <control type="group">
             
-            <!-- Background -->
+            <!-- 
+            ****************************************
+            * Background
+            ****************************************
+            -->
             <control type="group">
                 <!-- Image -->
                 <control type="image">
@@ -16,7 +21,11 @@
                 </control>      
             </control>
 
-            <!-- Now playing -->
+            <!-- 
+            ****************************************
+            * Now playing   
+            ****************************************
+            -->
             <control type="group">
                 <width>500</width>
                 <height>600</height>
@@ -44,7 +53,7 @@
                     <font>font13</font>
 
                     <!-- Title -->
-                    <control type="label" id="np_title">
+                    <control type="label" id="1">
                         <font>font30_title</font>
                         <scroll>true</scroll>
                         <align>center</align>
@@ -52,18 +61,65 @@
                     </control>
                     
                     <!-- Album  -->
-                    <control type="label" id="np_album">
+                    <control type="label" id="2">
                         <align>center</align>
                         <top>30</top>
                         <label>Dolor sit amet lorem</label>
                     </control>
                     
                     <!-- Artist -->
-                    <control type="label" id="np_artist">
+                    <control type="label" id="3">
                         <align>center</align>
                         <top>60</top>
                         <label>Qui minim labore</label>
                     </control>
+                </control>
+            </control>
+
+            <!-- 
+            ****************************************
+            * Playlist
+            ****************************************
+            -->
+            <control type="group">
+                <top>70</top>
+                <left>640</left>
+                <control type="group">
+                    <left>70</left>
+                    <control type="label">
+                        <font>font10</font>
+                        <label>Track title</label>
+                    </control>
+                    <control type="label">
+                        <top>20</top>
+                        <font>font10</font>
+                        <label>Album | Artist</label>
+                    </control>
+                </control>
+
+                <control type="list" id="999">
+                    <width>500</width>
+                    <height>400</height>
+                    <itemlayout>
+                        <control type="label">
+                            <posx>0</posx>
+                            <posy>0</posy>
+                            <width>400</width>
+                            <height>50</height>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                    </itemlayout>
+                    <content>
+                        <item>
+                            <label>Item 1</label>
+                        </item>
+                        <item>
+                            <label>Item 2</label>
+                        </item>
+                        <item>
+                            <label>Item 3</label>
+                        </item>
+                    </content>
                 </control>
             </control>
         </control>
