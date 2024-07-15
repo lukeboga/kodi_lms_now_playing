@@ -62,13 +62,7 @@ class NowPlaying(xbmcgui.WindowXML):
         
         if playlist_data:
             # Update playlist items
-            playlist_items = [
-                xbmcgui.ListItem(label=f"{item['title']} by {item['artist']} from {item['album']}") 
-                for item in playlist_data
-            ]
-            self.playlist.reset()
-            for item in playlist_items:
-                self.playlist.addItem(item)
+            pass
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
     
@@ -79,4 +73,3 @@ class NowPlaying(xbmcgui.WindowXML):
         # This method is called when an action is performed
         if action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
             self.close()
-
