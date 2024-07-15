@@ -18,29 +18,31 @@ class NowPlaying(xbmcgui.WindowXML):
         Called when the window is initialized.
         Fetches and displays 'now playing' information.
         """
-        self.init_elems();
+        self.lms_data = fetch_lms_status()
+        self.init_elems()
 
     def init_elems(self):
-        WINDOW_ID = xbmcgui.getCurrentWindowId()
-        VW = xbmcgui.getScreenWidth()
-        VH = xbmcgui.getScreenHeight()
-        VW_50 = round(VW * 0.5)
-        VH_50 = round(VH * 0.5)
-        
         self.now_playing_title = self.getControl(1)
         self.now_playing_album = self.getControl(2)
         self.now_playing_artist = self.getControl(3)
+        self.playlist = self.getControl(4)
 
-        self.set_now_playing()
+        self.populate_now_playing()
+        self.populate_playlist()
 
-    def set_now_playing(self):
-        lms_status = fetch_lms_status()
-        now_playing = get_now_playing(lms_status)
-        playlist = get_playlist(lms_status)
+    def populate_now_playing(self):
+        now_playing_data = get_now_playing(self.lms_data)
         
-        if now_playing:
+        if now_playing_data:
             pass
-            # log_now_playing(now_playing)
+        else:
+            log_message("No 'now playing' information available.", xbmc.LOGWARNING)
+    
+    def populate_playlist(self):
+        playlist_data = get_playlist(self.lms_data)
+        
+        if playlist_data:
+            pass
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
     
