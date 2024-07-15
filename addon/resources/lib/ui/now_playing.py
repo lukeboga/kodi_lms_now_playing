@@ -58,11 +58,20 @@ class NowPlaying(xbmcgui.WindowXML):
             self.artwork.setImage(default_artwork)
 
     def populate_playlist(self):
+        """
+        Populates the playlist UI element with the current playlist's information.
+        """
         playlist_data = get_playlist(self.lms_data)
         
         if playlist_data:
             # Update playlist items
-            pass
+            self.playlist.reset()
+            for item in playlist_data:
+                list_item = xbmcgui.ListItem(label=item['title'])
+                info_tag = list_item.getMusicInfoTag()
+                info_tag.setAlbum(item['album'])
+                info_tag.setArtist(item['artist'])
+                self.playlist.addItem(list_item)
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
     
