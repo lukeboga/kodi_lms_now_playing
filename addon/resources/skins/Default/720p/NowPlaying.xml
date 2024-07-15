@@ -86,28 +86,36 @@
             -->
             <control type="group">
                 <height>600</height>
-                <left>710</left>
+                <left>640</left>
                 <top>70</top>
                 <width>500</width>
 
                 <control type="list" id="4">
-                    <itemlayout>
-                        <control type="label">
-                            <height>50</height>
-                            <visible>true</visible>
-                            <width>400</width>
-                            
-                            <label>$INFO[ListItem.Label]</label>
+                    <height>600</height>
+                    <left>70</left>
+                    <width>500</width>
+                    
+                    <!-- Item (unfocused) -->
+                    <itemlayout height="20" width="400">
+                        <control type="group">
+                            <control type="label">
+                                <font>font10</font>
+                                <visible>true</visible>
+                                
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
                         </control>
                     </itemlayout>
                     
-                    <focusedlayout>
-                        <control type="label">
-                            <height>50</height>
-                            <visible>true</visible>
-                            <width>400</width>
-                            
-                            <label>$INFO[ListItem.Label]</label>
+                    <!-- Item (focused) -->
+                    <focusedlayout height="20" width="400">
+                        <control type="group">
+                            <control type="label">
+                                <font>font10</font>
+                                <visible>true</visible>
+                                
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
                         </control>
                     </focusedlayout>
                     

@@ -26,7 +26,6 @@ class NowPlaying(xbmcgui.WindowXML):
         VW_50 = round(VW * 0.5)
         VH_50 = round(VH * 0.5)
         
-        
         self.now_playing_title = self.getControl(1)
         self.now_playing_album = self.getControl(2)
         self.now_playing_artist = self.getControl(3)
