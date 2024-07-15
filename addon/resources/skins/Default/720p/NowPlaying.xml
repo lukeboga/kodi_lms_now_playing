@@ -118,18 +118,6 @@
                             </control>
                         </control>
                     </focusedlayout>
-                    
-                    <content>
-                        <item>
-                            <label>Item 1</label>
-                        </item>
-                        <item>
-                            <label>Item 2</label>
-                        </item>
-                        <item>
-                            <label>Item 3</label>
-                        </item>
-                    </content>
                 </control>
             </control>
         </control>

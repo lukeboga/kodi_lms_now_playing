@@ -5,10 +5,6 @@ from resources.lib.api.get_now_playing import get_now_playing
 from resources.lib.api.get_playlist import get_playlist
 from resources.lib.utils.log_message import log_message
 
-
-WINDOW = "NowPlaying"
-TRACK_TITLE_POS_X = "TrackTitlePosX"
-
 class NowPlaying(xbmcgui.WindowXML):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -31,13 +27,23 @@ class NowPlaying(xbmcgui.WindowXML):
         self.populate_playlist()
 
     def populate_now_playing(self):
+        """
+        Populates the 'now playing' UI elements with the current track's information.
+        """
         now_playing_data = get_now_playing(self.lms_data)
         
         if now_playing_data:
-            pass
+            # Update the labels with the now playing data
+            self.now_playing_title.setLabel(now_playing_data['title'])
+            self.now_playing_album.setLabel(now_playing_data['album'])
+            self.now_playing_artist.setLabel(now_playing_data['artist'])
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
-    
+            # Clear the labels if no data is available
+            self.now_playing_title.setLabel("Title")
+            self.now_playing_album.setLabel("Album")
+            self.now_playing_artist.setLabel("Artist")
+
     def populate_playlist(self):
         playlist_data = get_playlist(self.lms_data)
         
@@ -53,3 +59,4 @@ class NowPlaying(xbmcgui.WindowXML):
         # This method is called when an action is performed
         if action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
             self.close()
+
