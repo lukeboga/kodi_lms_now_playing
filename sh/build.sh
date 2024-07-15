@@ -1,35 +1,36 @@
 #!/bin/bash
 
-dest_sub_dir=""
+version="v0.0.1"
+home_dir="/home/$USER"
+kodi_dir="$home_dir/_Tmp"
+project_dir="$home_dir/Development/Kodi/kodi_lms_now_playing"
+src_dir="$project_dir/addon"
+timestamp=$(date +"%Y-%m-%d-%H.%M.%S")
+
+build_sub_dir=""
 
 case "$1" in
   "working")
-    dest_sub_dir="working"
+    build_sub_dir="working"
     ;;
   *)
-    dest_sub_dir="test"
+    build_sub_dir="test"
     ;;
 esac
 
-home_dir="/home/n4lbm"
-root_dir="$home_dir/Development/Kodi/kodi_lms_now_playing"
-src_dir="$root_dir/src"
-dest_dir="$root_dir/dest/$dest_sub_dir"
-version="v0.0.1"
-timestamp=$(date +"%Y-%m-%d-%H.%M.%S")
+build_dir="$project_dir/build/$build_sub_dir"
 addon_name="klms-addon-$version-$timestamp"
-temp_build_dir="$dest_dir/$addon_name"
+temp_build_dir="$build_dir/$addon_name"
 zip_name="$addon_name.zip"
-kodi_dir="$home_dir/_Tmp"
 
 echo "Building zip file for Kodi..."
 mkdir $temp_build_dir
 cp -r $src_dir/* $temp_build_dir
-cd $dest_dir
+cd $build_dir
 zip -r $zip_name $addon_name
 rm -r $addon_name
-rm -r "$kodi_dir"/*.zip
+rm -rf "$kodi_dir"/*.zip
 cp $zip_name $kodi_dir
-cd $root_dir
+cd $project_dir
 echo "Build complete!"
 
