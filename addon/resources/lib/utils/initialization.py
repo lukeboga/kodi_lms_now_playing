@@ -1,6 +1,6 @@
 import xbmc  # Kodi API module for logging
 from resources.lib.utils.log_message import log_message
-from resources.lib.api.fetch_now_playing import requests_session
+from resources.lib.api.fetch_lms_status import requests_session
 from resources.lib.utils.read_settings import read_settings
 
 def initialize():

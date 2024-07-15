@@ -6,15 +6,15 @@ from resources.lib.utils.read_settings import read_settings
 # Create a global session object
 requests_session = requests.Session()
 
-def get_now_playing():
+def fetch_lms_status():
     """
-    Fetch the currently playing track information from the Logitech Media Server (LMS) using JSON-RPC.
+    Fetch the JSON data from the Logitech Media Server (LMS) using JSON-RPC.
     
-    This function makes an HTTP POST request to the LMS to retrieve the current track information.
-    It handles potential errors and logs the 'now playing' data to the Kodi log.
+    This function makes an HTTP POST request to the LMS to retrieve the current data.
+    It handles potential errors and logs the response to the Kodi log.
     
     Returns:
-        dict: A dictionary containing the track title, artist, album, duration, and current playback time.
+        dict: A dictionary containing the JSON response data.
     """
     # Retrieve LMS settings
     settings = read_settings()
@@ -35,22 +35,13 @@ def get_now_playing():
         beautified_json = json.dumps(data, indent=4)
         xbmc.log(f"Full JSON response:\n{beautified_json}", level=xbmc.LOGINFO)
 
-        # Extract relevant 'now playing' information
-        now_playing = {
-            'title': data['result']['playlist_loop'][0]['title'],
-            'artist': data['result']['playlist_loop'][0]['artist'],
-            'album': data['result']['playlist_loop'][0]['album'],
-            'duration': data['result']['playlist_loop'][0]['duration'],
-            'time': data['result']['time']
-        }
-
-        return now_playing
+        return data
     except requests.RequestException as e:
         # Log any errors encountered during the API request
-        xbmc.log(f"Error fetching now playing: {e}", level=xbmc.LOGERROR)
+        xbmc.log(f"Error fetching data: {e}", level=xbmc.LOGERROR)
         return None
     except (KeyError, IndexError) as e:
         # Log any errors encountered during data extraction
-        xbmc.log(f"Error processing now playing data: {e}", level=xbmc.LOGERROR)
+        xbmc.log(f"Error processing data: {e}", level=xbmc.LOGERROR)
         return None
 

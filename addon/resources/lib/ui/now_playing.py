@@ -1,7 +1,8 @@
 import xbmc
 import xbmcgui
-from resources.lib.api.fetch_now_playing import get_now_playing
-from resources.lib.api.log_now_playing import log_now_playing
+from resources.lib.api.fetch_lms_status import fetch_lms_status
+from resources.lib.api.get_now_playing import get_now_playing
+from resources.lib.api.get_playlist import get_playlist
 from resources.lib.utils.log_message import log_message
 
 
@@ -33,9 +34,13 @@ class NowPlaying(xbmcgui.WindowXML):
         self.set_now_playing()
 
     def set_now_playing(self):
-        now_playing = get_now_playing()
+        lms_status = fetch_lms_status()
+        now_playing = get_now_playing(lms_status)
+        playlist = get_playlist(lms_status)
+        
         if now_playing:
-            log_now_playing(now_playing)
+            pass
+            # log_now_playing(now_playing)
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
     
