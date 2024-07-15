@@ -1,5 +1,6 @@
 import requests
 import xbmc
+import json
 from resources.lib.utils.read_settings import read_settings
 
 # Create a global session object
@@ -29,6 +30,10 @@ def get_now_playing():
         response = requests_session.post(url, json=payload, headers={"Content-Type": "application/json"})
         response.raise_for_status()  # Raise an HTTPError for bad responses (4xx and 5xx)
         data = response.json()  # Parse the JSON response
+
+        # Log the entire JSON response (beautified with indentation)
+        beautified_json = json.dumps(data, indent=4)
+        xbmc.log(f"Full JSON response:\n{beautified_json}", level=xbmc.LOGINFO)
 
         # Extract relevant 'now playing' information
         now_playing = {

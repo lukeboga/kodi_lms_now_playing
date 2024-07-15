@@ -30,6 +30,8 @@ class NowPlaying(xbmcgui.WindowXML):
         self.now_playing_album = self.getControl(2)
         self.now_playing_artist = self.getControl(3)
 
+        self.set_now_playing()
+
     def set_now_playing(self):
         now_playing = get_now_playing()
         if now_playing:
