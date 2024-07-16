@@ -4,11 +4,13 @@ from resources.lib.api.fetch_lms_status import fetch_lms_status
 from resources.lib.api.get_now_playing import get_now_playing
 from resources.lib.api.get_playlist import get_playlist
 from resources.lib.utils.log_message import log_message
+from resources.lib.api.telnet_handler import set_update_ui_callback  # Import the callback setter
 
 class NowPlaying(xbmcgui.WindowXML):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    
+        set_update_ui_callback(self.update_ui)  # Set the update UI callback
+
     def onInit(self):
         """
         Called when the window is initialized.
@@ -27,6 +29,17 @@ class NowPlaying(xbmcgui.WindowXML):
         self.playlist = self.getControl(6)
 
         # Populate UI elements
+        self.populate_now_playing()
+        self.populate_playlist()
+
+    def update_ui(self, lms_data):
+        """
+        Update the UI based on the LMS data received.
+        
+        Args:
+            lms_data (dict): The LMS data received from the telnet handler.
+        """
+        self.lms_data = lms_data
         self.populate_now_playing()
         self.populate_playlist()
 
@@ -85,3 +98,4 @@ class NowPlaying(xbmcgui.WindowXML):
         # This method is called when an action is performed
         if action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
             self.close()
+

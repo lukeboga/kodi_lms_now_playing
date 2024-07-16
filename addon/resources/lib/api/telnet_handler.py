@@ -5,12 +5,24 @@ from queue import Queue, Empty
 from resources.lib.utils.read_settings import read_settings
 from resources.lib.utils.log_message import log_message
 from resources.lib.deps import telnetlib
+from resources.lib.api.fetch_lms_status import fetch_lms_status  # Ensure this is imported to fetch LMS status
 
 # Global telnet connection instance and thread instance
 telnet_connection = None
 subscriber_thread = None
 event_queue = Queue()
 debounce_timer = None
+update_ui_callback = None  # Global callback function
+
+def set_update_ui_callback(callback):
+    """
+    Set the callback function for updating the UI.
+    
+    Args:
+        callback (function): The callback function to set.
+    """
+    global update_ui_callback
+    update_ui_callback = callback
 
 def connect_to_lms():
     """
@@ -50,7 +62,13 @@ def process_event():
         except ImportError:
             pass
 
+        # Fetch LMS data
+        lms_data = fetch_lms_status()
         log_message(f"Received event: {event_data}")
+
+        # Trigger the UI update callback if it's set
+        if update_ui_callback:
+            update_ui_callback(lms_data)
 
         # Clear the debounce timer
         debounce_timer = None
