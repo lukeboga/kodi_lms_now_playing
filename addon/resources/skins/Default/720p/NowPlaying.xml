@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <window id="1155">
     <backgroundcolor>0</backgroundcolor>
-    <defaultcontrol always="false">6</defaultcontrol>
+    <!-- <defaultcontrol always="false">100</defaultcontrol> -->
     
     <controls>
         <control type="group">

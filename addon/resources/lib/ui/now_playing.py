@@ -66,12 +66,15 @@ class NowPlaying(xbmcgui.WindowXML):
         if playlist_data:
             # Update playlist items
             self.playlist.reset()
-            for item in playlist_data:
-                list_item = xbmcgui.ListItem(label=item['title'])
-                info_tag = list_item.getMusicInfoTag()
+            
+            for index, item in enumerate(playlist_data):
+                li = xbmcgui.ListItem(label=item['title'])
+                li.setProperty("id", str(100 + index))
+                info_tag = li.getMusicInfoTag()
                 info_tag.setAlbum(item['album'])
                 info_tag.setArtist(item['artist'])
-                self.playlist.addItem(list_item)
+                
+                self.playlist.addItem(li)
         else:
             log_message("No 'now playing' information available.", xbmc.LOGWARNING)
     

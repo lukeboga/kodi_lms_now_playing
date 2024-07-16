@@ -19,7 +19,8 @@ def read_settings():
         settings = {
             'lms_server': addon.getSetting('lms_server'),
             'lms_port': addon.getSetting('lms_port'),
-            'lms_player_id': addon.getSetting('lms_player_id')
+            'lms_player_id': addon.getSetting('lms_player_id'),
+            'lms_telnet_port': addon.getSetting('lms_telnet_port')
         }
         return settings
     except Exception as e:
