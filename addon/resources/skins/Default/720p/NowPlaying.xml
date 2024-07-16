@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <window id="1155">
     <backgroundcolor>0</backgroundcolor>
+    <defaultcontrol always="false">6</defaultcontrol>
+    
     <controls>
         <control type="group">
             
@@ -13,12 +15,12 @@
                 <!-- Image -->
                 <control type="image"  id="1">
                     <aspectratio>scale</aspectratio> 
-                    <texture>special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg</texture>
+                    <texture>special://home/addons/plugin.program.klmsaddon/resources/media/black-90.png</texture>
                 </control>
                 <!-- Overlay -->
                 <control type="image">
                     <texture>special://home/addons/plugin.program.klmsaddon/resources/media/black-90.png</texture>
-                </control>      
+                </control>
             </control>
 
             <!-- 
@@ -30,51 +32,54 @@
                 <height>600</height>
                 <left>70</left>
                 <top>70</top>
-                <width>500</width>
+                <width>570</width> <!-- 640px - 70px -->
 
-                <!-- Cover -->
-                <control type="image" id="2">
-                    <height>500</height>
-                    <left>0</left>
-                    <top>0</top>
-                    <width>500</width>
-                    
-                    <texture>special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg</texture>
-                </control>      
-
-                <!-- Track -->
                 <control type="group">
-                    <font>font13</font>
-                    <height>25</height>
-                    <left>50</left>
-                    <textcolor>30FFFFFF</textcolor>
-                    <top>505</top>
-                    <visible>true</visible>
-                    <width>400</width>
+                    <left>70</left>
 
-                    <!-- Title -->
-                    <control type="label" id="3">
-                        <align>center</align>
-                        <font>font30_title</font>
-                        <scroll>true</scroll>
+                    <!-- Cover -->
+                    <control type="image" id="2">
+                        <height>500</height>
+                        <left>0</left>
+                        <top>0</top>
+                        <width>500</width>
                         
-                        <label>Lorem ipsum dolor sit amet (dipisicing minim)</label>
-                    </control>
-                    
-                    <!-- Album  -->
-                    <control type="label" id="4">
-                        <align>center</align>
-                        <top>30</top>
+                        <texture>special://home/addons/plugin.program.klmsaddon/resources/media/black-90</texture>
+                    </control>      
+
+                    <!-- Track -->
+                    <control type="group">
+                        <font>font13</font>
+                        <height>25</height>
+                        <left>50</left>
+                        <top>505</top>
+                        <visible>true</visible>
+                        <width>400</width>
+
+                        <!-- Title -->
+                        <control type="label" id="3">
+                            <align>center</align>
+                            <font>font30_title</font>
+                            <scroll>true</scroll>
+                            
+                            <label></label>
+                        </control>
                         
-                        <label>Dolor sit amet lorem</label>
-                    </control>
-                    
-                    <!-- Artist -->
-                    <control type="label" id="5">
-                        <align>center</align>
-                        <top>60</top>
+                        <!-- Album  -->
+                        <control type="label" id="4">
+                            <align>center</align>
+                            <top>30</top>
+                            
+                            <label></label>
+                        </control>
                         
-                        <label>Qui minim labore</label>
+                        <!-- Artist -->
+                        <control type="label" id="5">
+                            <align>center</align>
+                            <top>60</top>
+                            
+                            <label></label>
+                        </control>
                     </control>
                 </control>
             </control>
@@ -88,20 +93,21 @@
                 <height>600</height>
                 <left>640</left>
                 <top>70</top>
-                <width>500</width>
+                <width>570</width>
 
                 <control type="list" id="6">
                     <height>600</height>
                     <left>70</left>
-                    <width>500</width>
+                    <width>570</width>
                     
                     <!-- Item (unfocused) -->
                     <itemlayout height="50" width="400">
                         <control type="group">
                             <control type="label">
                                 <font>font10</font>
+                                <left>20</left>
                                 <visible>true</visible>
-                                <width>400</width>
+                                <width>380</width>
 
                                 <label>$INFO[ListItem.Label]</label>
                             </control>
@@ -109,10 +115,12 @@
                                 <font>font10</font>
                                 <visible>true</visible>
                                 <height>20</height>
+                                <left>20</left>
                                 <top>20</top>
                                 <width>400</width>
                                 
-                                <label>$INFO[ListItem.Album] | $INFO[ListItem.Artist]</label>
+                                <label>$INFO[ListItem.Artist] | $INFO[ListItem.Album]</label>
+                                <textcolor>FFA0A0A0</textcolor>
                             </control>
                         </control>
                     </itemlayout>
@@ -120,11 +128,20 @@
                     <!-- Item (focused) -->
                     <focusedlayout height="50" width="400">
                         <control type="group">
+                            <control type="image">
+                                <visible>true</visible>
+                                <height>10</height>
+                                <top>15</top>
+                                <width>10</width>
+                                <texture>special://home/addons/plugin.program.klmsaddon/resources/media/circle-white.png</texture>
+                                
+                            </control>
                             <control type="label">
                                 <font>font10</font>
                                 <visible>true</visible>
                                 <height>20</height>
-                                <width>400</width>
+                                <left>20</left>
+                                <width>380</width>
                                 
                                 <label>$INFO[ListItem.Label]</label>
                             </control>
@@ -132,10 +149,12 @@
                                 <font>font10</font>
                                 <visible>true</visible>
                                 <height>20</height>
+                                <left>20</left>
                                 <top>20</top>
                                 <width>400</width>
                                 
-                                <label>$INFO[ListItem.Album] | $INFO[ListItem.Artist]</label>
+                                <label>$INFO[ListItem.Artist] | $INFO[ListItem.Album]</label>
+                                <textcolor>FFA0A0A0</textcolor>
                             </control>
                         </control>
                     </focusedlayout>
