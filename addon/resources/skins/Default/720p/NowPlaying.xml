@@ -133,8 +133,8 @@
                                 <height>10</height>
                                 <top>15</top>
                                 <width>10</width>
-                                <texture>special://home/addons/plugin.program.klmsaddon/resources/media/circle-white.png</texture>
                                 
+                                <texture>special://home/addons/plugin.program.klmsaddon/resources/media/circle-white.png</texture>
                             </control>
                             <control type="label">
                                 <font>font10</font>
