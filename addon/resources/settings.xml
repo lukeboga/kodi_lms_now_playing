@@ -4,6 +4,7 @@
         <setting id="lms_server" type="text" label="LMS: Server Address" default="192.168.1.201"/>
         <setting id="lms_port" type="number" label="LMS: Port" default="9000"/>
         <setting id="lms_player_id" type="text" label="LMS: Player ID" default="ab:7a:56:8b:fd:0f"/>
+        <setting id="lms_telnet_port" type="number" label="LMS: Telnet Port" default="9090"/>
     </category>
 </settings>
 
