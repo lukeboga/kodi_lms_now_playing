@@ -1,12 +1,16 @@
 import time
 import threading
-import logging
+import xbmc
+from queue import Queue, Empty
 from resources.lib.utils.read_settings import read_settings
 from resources.lib.utils.log_message import log_message
 from resources.lib.deps import telnetlib
 
-# Global telnet connection instance
+# Global telnet connection instance and thread instance
 telnet_connection = None
+subscriber_thread = None
+event_queue = Queue()
+debounce_timer = None
 
 def connect_to_lms():
     """
@@ -24,35 +28,51 @@ def connect_to_lms():
     while tn is None:
         try:
             tn = telnetlib.Telnet(host, port)
-            tn.write(b"listen 1\n")  # Subscribe to all events
-            log_message("Connected to LMS via telnet.", logging.INFO)
+            tn.write(b"subscribe playlist\n")  # Subscribe to playlist events
+            log_message("Connected to LMS via telnet.")
         except Exception as e:
-            log_message(f"Connection failed, retrying in 5 seconds... Error: {e}", logging.ERROR)
+            log_message(f"Connection failed, retrying in 5 seconds... Error: {e}", xbmc.LOGERROR)
             time.sleep(5)
 
     telnet_connection = tn
     return tn
 
-def process_event(event_data):
+def process_event():
     """
-    Process the event data received from the LMS server and log it.
-    
-    Args:
-        event_data (str): The event data as a string.
+    Process the most recent event data from the queue.
     """
-    lines = event_data.strip().split("\n")
-    event = {}
-    for line in lines:
-        if ":" in line:
-            key, value = line.split(":", 1)
-            event[key.strip()] = value.strip()
-        else:
-            event['event'] = line.strip()
-    log_message(f"Received event: {event}", logging.INFO)
+    global debounce_timer
 
-def listen_for_events(tn):
+    def handle_event(event_data):
+        # Ensure xbmc is imported within the thread context
+        try:
+            import xbmc
+        except ImportError:
+            pass
+
+        log_message(f"Received event: {event_data}")
+
+        # Clear the debounce timer
+        debounce_timer = None
+
+    while True:
+        try:
+            # Wait for an event with a timeout to allow thread to exit cleanly
+            event_data = event_queue.get(timeout=1)
+            if event_data:
+                # Cancel any existing timer
+                if debounce_timer:
+                    debounce_timer.cancel()
+                
+                # Start a new timer
+                debounce_timer = threading.Timer(1.0, handle_event, args=(event_data,))  # 1-second debounce time
+                debounce_timer.start()
+        except Empty:
+            continue
+
+def subscribe_to_events(tn):
     """
-    Listen for events from the LMS server and process them.
+    Subscribe to events from the LMS server and add them to the event queue.
     
     Args:
         tn (telnetlib.Telnet): A telnet connection instance.
@@ -60,19 +80,28 @@ def listen_for_events(tn):
     while True:
         try:
             response = tn.read_until(b"\n")
-            process_event(response.decode('utf-8'))
+            event_queue.put(response.decode('utf-8'))
         except EOFError:
-            log_message("Connection lost, reconnecting...", logging.WARNING)
+            log_message("Connection lost, reconnecting...", xbmc.LOGWARNING)
             tn = connect_to_lms()
 
-def start_telnet_listener():
+def start_telnet_subscriber():
     """
-    Start a thread to listen for LMS events via telnet.
+    Start threads to subscribe to LMS events via telnet and process them.
     """
-    tn = connect_to_lms()
-    listener_thread = threading.Thread(target=listen_for_events, args=(tn,))
-    listener_thread.daemon = True
-    listener_thread.start()
+    global subscriber_thread
+
+    # Start the telnet subscription thread
+    if subscriber_thread is None or not subscriber_thread.is_alive():
+        tn = connect_to_lms()
+        subscriber_thread = threading.Thread(target=subscribe_to_events, args=(tn,))
+        subscriber_thread.daemon = True
+        subscriber_thread.start()
+
+    # Start the event processing thread
+    event_processor_thread = threading.Thread(target=process_event)
+    event_processor_thread.daemon = True
+    event_processor_thread.start()
 
 def close_telnet_connection():
     """
@@ -81,9 +110,9 @@ def close_telnet_connection():
     global telnet_connection
     if telnet_connection:
         try:
-            telnet_connection.write(b"listen 0\n")  # Unsubscribe from all events
+            telnet_connection.write(b"subscribe 0\n")  # Unsubscribe from playlist events
             telnet_connection.close()
-            log_message("Telnet connection closed and unsubscribed from events.", logging.INFO)
+            log_message("Telnet connection closed and unsubscribed from events.", xbmc.LOGINFO)
         except Exception as e:
-            log_message(f"Error closing telnet connection: {e}", logging.ERROR)
+            log_message(f"Error closing telnet connection: {e}", xbmc.LOGERROR)
 

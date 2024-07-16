@@ -32,8 +32,8 @@ def fetch_lms_status():
         data = response.json()  # Parse the JSON response
 
         # Log the entire JSON response (beautified with indentation)
-        beautified_json = json.dumps(data, indent=4)
-        xbmc.log(f"Full JSON response:\n{beautified_json}", level=xbmc.LOGINFO)
+        # beautified_json = json.dumps(data, indent=4)
+        # xbmc.log(f"Full JSON response:\n{beautified_json}", level=xbmc.LOGINFO)
 
         return data
     except requests.RequestException as e:

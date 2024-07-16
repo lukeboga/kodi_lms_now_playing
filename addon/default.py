@@ -4,7 +4,7 @@ from resources.lib.utils.log_message import log_message
 from resources.lib.utils.initialization import initialize
 from resources.lib.ui.now_playing import NowPlaying
 from resources.lib.utils.custom_monitor import AddonMonitor  # Import the custom monitor
-from resources.lib.api.telnet_handler import start_telnet_listener  # Import the telnet listener
+from resources.lib.api.telnet_handler import start_telnet_subscriber  # Import the telnet subscriber
 
 def main():
     """
@@ -27,8 +27,8 @@ if __name__ == '__main__':
         initialize()
         # Create and initialize the custom monitor
         monitor = AddonMonitor()
-        # Start the telnet listener
-        start_telnet_listener()
+        # Start the telnet subscriber
+        start_telnet_subscriber()
         # Call the main function to execute the addon's primary functionality
         main()
         # Wait for abort (exit) request

@@ -23,8 +23,8 @@ def get_playlist(data):
             for item in data['result']['playlist_loop']
         ]
 
-        beautified_json = json.dumps(playlist, indent=4) 
-        log_message(f"Playlist data: {beautified_json}", xbmc.LOGINFO);
+        # beautified_json = json.dumps(playlist, indent=4) 
+        # log_message(f"Playlist data: {beautified_json}", xbmc.LOGINFO);
 
         return playlist
     except (KeyError, IndexError) as e:

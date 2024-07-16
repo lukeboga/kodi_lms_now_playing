@@ -25,8 +25,8 @@ def get_now_playing(data):
             'artwork_url': f"http://{settings['lms_server']}:{settings['lms_port']}{data['result']['playlist_loop'][0]['artwork_url']}"
         }
         
-        beautified_json = json.dumps(now_playing, indent=4) 
-        log_message(f"Now playing data: {beautified_json}", xbmc.LOGINFO);
+        # beautified_json = json.dumps(now_playing, indent=4) 
+        # log_message(f"Now playing data: {beautified_json}", xbmc.LOGINFO);
 
         return now_playing
     except (KeyError, IndexError) as e:
