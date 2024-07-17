@@ -99,3 +99,52 @@ class NowPlaying(xbmcgui.WindowXML):
         if action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
             self.close()
 
+"""
+Detailed Explanation for Beginners:
+-----------------------------------
+
+1. **Importing Necessary Modules:**
+   - `xbmc`: Part of the Kodi API, used for various Kodi functionalities.
+   - `xbmcgui`: Part of the Kodi API, used for GUI functionalities.
+   - `fetch_lms_status`, `get_now_playing`, `get_playlist`, `log_message`, `set_update_ui_callback`: Custom utility functions and modules.
+
+2. **NowPlaying Class:**
+   - **Purpose:** Manages the 'Now Playing' window in the Kodi addon.
+   - **Inheritance:** Inherits from `xbmcgui.WindowXML`.
+
+3. **__init__ Method:**
+   - **Purpose:** Initializes the class and sets the update UI callback.
+   - **Args:** `*args`, `**kwargs`: Variable arguments for the class initialization.
+
+4. **onInit Method:**
+   - **Purpose:** Called when the window is initialized. Fetches and displays 'now playing' information.
+   - **Steps:** Fetches LMS data and initializes UI elements.
+
+5. **init_elems Method:**
+   - **Purpose:** Initializes controls and populates UI elements.
+   - **Steps:** Gets references to UI controls and populates them with data.
+
+6. **update_ui Method:**
+   - **Purpose:** Updates the UI based on the LMS data received.
+   - **Args:** `lms_data (dict)`: The LMS data received from the telnet handler.
+   - **Steps:** Updates the LMS data and populates the UI elements.
+
+7. **populate_now_playing Method:**
+   - **Purpose:** Populates the 'now playing' UI elements with the current track's information.
+   - **Steps:** Updates the labels and artwork images with 'now playing' data.
+
+8. **populate_playlist Method:**
+   - **Purpose:** Populates the playlist UI element with the current playlist's information.
+   - **Steps:** Updates the playlist items with data from the playlist.
+
+9. **onClick Method:**
+   - **Purpose:** Handles click events on the UI controls.
+   - **Args:** `controlId`: The ID of the control that was clicked.
+
+10. **onAction Method:**
+    - **Purpose:** Handles action events in the UI.
+    - **Args:** `action`: The action that was performed.
+    - **Steps:** Closes the window if the action is to go back or exit.
+
+"""
+

@@ -1,41 +1,49 @@
-<!-- 
-    Define the addon with a unique identifier, name, version, and provider name.
-    The extension point is set to 'xbmc.python.script' to indicate a program addon.
--->
 <addon id="plugin.program.klmsaddon" name="KLMS Addon" version="0.0.1" provider-name="LukeBM" extension="xbmc.python.script">
-
-    <!-- 
-        Specify the required dependencies for the addon.
-        This section ensures that the necessary modules are available for the addon to function correctly.
-    -->
     <requires>
-        <!-- Import the core Python module for Kodi addon development -->
         <import addon="xbmc.python" version="3.0.0"/>
-        <!-- Import the requests module for making HTTP requests -->
         <import addon="script.module.requests" version="2.25.1"/>
     </requires>
-
-    <!-- 
-        Define the script extension point for the addon.
-        This specifies the main Python script that will be executed when the addon is run.
-        The 'provides' tag indicates that this addon offers program functionality.
-    -->
     <extension point="xbmc.python.script" library="default.py">
         <provides>program</provides>
     </extension>
-
-    <!-- 
-        Provide metadata about the addon.
-        This includes a summary, a detailed description, and the platforms on which the addon can run.
-    -->
     <extension point="xbmc.addon.metadata">
-        <!-- Brief summary of the addon -->
         <summary>KLMS Addon for Logitech Media Server</summary>
-        <!-- Detailed description of the addon's functionality -->
         <description>Fetch and display 'now playing' information from LMS.</description>
-        <!-- Platform compatibility -->
         <platform>all</platform>
     </extension>
 
 </addon>
+
+<!-- Detailed Explanation for Beginners:
+
+1. **Purpose of the File:**
+   - This XML file defines the basic metadata and configuration for the KLMS Addon.
+   - It specifies details such as the addon's unique identifier, version, dependencies, and entry points.
+
+2. **Addon Definition:**
+   - `<addon>`: The root element defining the addon. It includes:
+     - `id`: Unique identifier for the addon.
+     - `name`: Name of the addon.
+     - `version`: Current version of the addon.
+     - `provider-name`: Name of the addon provider.
+     - `extension`: Indicates the type of addon (program addon).
+
+3. **Dependencies:**
+   - `<requires>`: This section lists the dependencies required for the addon to function.
+     - `xbmc.python`: Core Python module for Kodi addon development.
+     - `script.module.requests`: Requests module for making HTTP requests.
+
+4. **Script Extension Point:**
+   - `<extension point="xbmc.python.script" library="default.py">`: Specifies the main Python script to be executed.
+     - `provides`: Indicates that the addon offers program functionality.
+
+5. **Metadata:**
+   - `<extension point="xbmc.addon.metadata">`: Provides metadata about the addon.
+     - `summary`: Brief summary of the addon.
+     - `description`: Detailed description of the addon's functionality.
+     - `platform`: Indicates the platforms on which the addon can run (all platforms in this case).
+
+6. **User Interface:**
+   - This file is essential for Kodi to recognize and load the addon, providing necessary information and dependencies.
+-->
 
