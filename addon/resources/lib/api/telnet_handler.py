@@ -6,136 +6,139 @@ from resources.lib.utils.read_settings import read_settings
 from resources.lib.utils.log_message import log_message
 from resources.lib.utils.error_handling import log_exception
 from resources.lib.deps import telnetlib
-from resources.lib.api.fetch_lms_status import fetch_lms_status  # Ensure this is imported to fetch LMS status
+from resources.lib.api.fetch_lms_status import fetch_lms_status
+from resources.lib.utils.network_utils import is_port_open, log_network_issue
 
-# Global telnet connection instance and thread instance
-telnet_connection = None
-subscriber_thread = None
-event_queue = Queue()
-debounce_timer = None
-update_ui_callback = None  # Global callback function
+class TelnetHandler:
+    def __init__(self):
+        self.telnet_connection = None
+        self.subscriber_thread = None
+        self.event_queue = Queue()
+        self.debounce_timer = None
+        self.update_ui_callback = None
 
-def set_update_ui_callback(callback):
-    """
-    Set the callback function for updating the UI.
-    
-    Args:
-        callback (function): The callback function to set.
-    """
-    global update_ui_callback
-    update_ui_callback = callback
+    def set_update_ui_callback(self, callback):
+        """
+        Set the callback function for updating the UI.
 
-def connect_to_lms():
-    """
-    Establish a telnet connection to the LMS server using settings from the configuration.
-    
-    Returns:
-        telnetlib.Telnet: A telnet connection instance.
-    """
-    global telnet_connection
-    settings = read_settings()
-    host = settings['lms_server']
-    port = settings['lms_telnet_port']
-    tn = None
+        Args:
+            callback (function): The callback function to set.
+        """
+        self.update_ui_callback = callback
 
-    while tn is None:
-        try:
-            tn = telnetlib.Telnet(host, port)
-            tn.write(b"subscribe playlist\n")  # Subscribe to playlist events
-            log_message("Connected to LMS via telnet.")
-        except Exception as e:
-            log_message(f"Connection failed, retrying in 5 seconds... Error: {e}", xbmc.LOGERROR)
-            log_exception(e)
-            time.sleep(5)
+    def connect_to_lms(self):
+        """
+        Establish a telnet connection to the LMS server using settings from the configuration.
 
-    telnet_connection = tn
-    return tn
+        Returns:
+            telnetlib.Telnet: A telnet connection instance.
+        """
+        settings = read_settings()
+        host = settings['lms_server']
+        port = int(settings['lms_telnet_port'])  # Convert port to integer
+        tn = None
 
-def process_event():
-    """
-    Process the most recent event data from the queue.
-    """
-    global debounce_timer
+        while tn is None:
+            if not is_port_open(host, port):
+                log_network_issue(f"LMS server port {port} is not open.")
+                time.sleep(5)
+                continue
 
-    def handle_event(event_data):
-        # Ensure xbmc is imported within the thread context
-        try:
-            import xbmc
-        except ImportError:
-            pass
+            try:
+                tn = telnetlib.Telnet(host, port)
+                tn.write(b"subscribe playlist\n")  # Subscribe to playlist events
+                log_message("Connected to LMS via telnet.")
+            except Exception as e:
+                log_message(f"Connection failed, retrying in 5 seconds... Error: {e}", xbmc.LOGERROR)
+                log_exception(e)
+                time.sleep(5)
 
-        # Fetch LMS data
-        lms_data = fetch_lms_status()
-        log_message(f"Received event: {event_data}")
+        self.telnet_connection = tn
+        return tn
 
-        # Trigger the UI update callback if it's set
-        if update_ui_callback:
-            update_ui_callback(lms_data)
+    def process_event(self):
+        """
+        Process the most recent event data from the queue.
+        """
+        def handle_event(event_data):
+            # Ensure xbmc is imported within the thread context
+            try:
+                import xbmc
+            except ImportError:
+                pass
 
-        # Clear the debounce timer
-        debounce_timer = None
+            # Fetch LMS data
+            lms_data = fetch_lms_status()
+            log_message(f"Received event: {event_data}")
 
-    while True:
-        try:
-            # Wait for an event with a timeout to allow thread to exit cleanly
-            event_data = event_queue.get(timeout=1)
-            if event_data:
-                # Cancel any existing timer
-                if debounce_timer:
-                    debounce_timer.cancel()
-                
-                # Start a new timer
-                debounce_timer = threading.Timer(1.0, handle_event, args=(event_data,))  # 1-second debounce time
-                debounce_timer.start()
-        except Empty:
-            continue
+            # Trigger the UI update callback if it's set
+            if self.update_ui_callback:
+                self.update_ui_callback(lms_data)
 
-def subscribe_to_events(tn):
-    """
-    Subscribe to events from the LMS server and add them to the event queue.
-    
-    Args:
-        tn (telnetlib.Telnet): A telnet connection instance.
-    """
-    while True:
-        try:
-            response = tn.read_until(b"\n")
-            event_queue.put(response.decode('utf-8'))
-        except EOFError:
-            log_message("Connection lost, reconnecting...", xbmc.LOGWARNING)
-            connect_to_lms()
+            # Clear the debounce timer
+            self.debounce_timer = None
 
-def start_telnet_subscriber():
-    """
-    Start threads to subscribe to LMS events via telnet and process them.
-    """
-    global subscriber_thread
+        while True:
+            try:
+                # Wait for an event with a timeout to allow thread to exit cleanly
+                event_data = self.event_queue.get(timeout=1)
+                if event_data:
+                    # Cancel any existing timer
+                    if self.debounce_timer:
+                        self.debounce_timer.cancel()
 
-    # Start the telnet subscription thread
-    if subscriber_thread is None or not subscriber_thread.is_alive():
-        tn = connect_to_lms()
-        subscriber_thread = threading.Thread(target=subscribe_to_events, args=(tn,))
-        subscriber_thread.daemon = True
-        subscriber_thread.start()
+                    # Start a new timer
+                    self.debounce_timer = threading.Timer(1.0, handle_event, args=(event_data,))  # 1-second debounce time
+                    self.debounce_timer.start()
+            except Empty:
+                continue
 
-    # Start the event processing thread
-    event_processor_thread = threading.Thread(target=process_event)
-    event_processor_thread.daemon = True
-    event_processor_thread.start()
+    def subscribe_to_events(self, tn):
+        """
+        Subscribe to events from the LMS server and add them to the event queue.
 
-def close_telnet_connection():
-    """
-    Close the telnet connection and unsubscribe from events.
-    """
-    global telnet_connection
-    if telnet_connection:
-        try:
-            telnet_connection.write(b"subscribe 0\n")  # Unsubscribe from playlist events
-            telnet_connection.close()
-            log_message("Telnet connection closed and unsubscribed from events.", xbmc.LOGINFO)
-        except Exception as e:
-            log_message(f"Error closing telnet connection: {e}", xbmc.LOGERROR)
-            log_exception(e)
+        Args:
+            tn (telnetlib.Telnet): A telnet connection instance.
+        """
+        while True:
+            try:
+                response = tn.read_until(b"\n")
+                self.event_queue.put(response.decode('utf-8'))
+            except EOFError:
+                log_message("Connection lost, reconnecting...", xbmc.LOGWARNING)
+                self.connect_to_lms()
+
+    def start_telnet_subscriber(self):
+        """
+        Start threads to subscribe to LMS events via telnet and process them.
+        """
+        # Start the telnet subscription thread
+        if self.subscriber_thread is None or not self.subscriber_thread.is_alive():
+            tn = self.connect_to_lms()
+            self.subscriber_thread = threading.Thread(target=self.subscribe_to_events, args=(tn,))
+            self.subscriber_thread.daemon = True
+            self.subscriber_thread.start()
+
+        # Start the event processing thread
+        event_processor_thread = threading.Thread(target=self.process_event)
+        event_processor_thread.daemon = True
+        event_processor_thread.start()
+
+    def close_telnet_connection(self):
+        """
+        Close the telnet connection and unsubscribe from events.
+        """
+        if self.telnet_connection:
+            try:
+                self.telnet_connection.write(b"subscribe 0\n")  # Unsubscribe from playlist events
+                self.telnet_connection.close()
+                log_message("Telnet connection closed and unsubscribed from events.", xbmc.LOGINFO)
+            except Exception as e:
+                log_message(f"Error closing telnet connection: {e}", xbmc.LOGERROR)
+                log_exception(e)
+
+# Instantiate the TelnetHandler
+telnet_handler = TelnetHandler()
 
 """
 Detailed Explanation for Beginners:
@@ -148,35 +151,20 @@ Detailed Explanation for Beginners:
    - `Queue, Empty`: For handling queue operations and exceptions.
    - `read_settings`, `log_message`, `log_exception`, `fetch_lms_status`: Custom utility functions and modules.
    - `telnetlib`: Imported from `resources.lib.deps`.
+   - `is_port_open`, `log_network_issue`: Custom network utility functions for checking if a port is open and logging network issues.
 
-2. **Global Variables:**
-   - `telnet_connection`, `subscriber_thread`, `event_queue`, `debounce_timer`, `update_ui_callback`: Various global instances for managing the telnet connection and events.
+2. **TelnetHandler Class:**
+   - **Purpose:** Manages the telnet connection, event subscription, and event processing for the KLMS Addon.
+   - **Methods:**
+     - `__init__`: Initializes the class variables.
+     - `set_update_ui_callback`: Sets the callback function for updating the UI.
+     - `connect_to_lms`: Establishes a telnet connection to the LMS server using settings from the configuration.
+     - `process_event`: Processes the most recent event data from the queue, debounces events, fetches LMS data, and triggers the UI update callback.
+     - `subscribe_to_events`: Subscribes to events from the LMS server and adds them to the event queue.
+     - `start_telnet_subscriber`: Starts threads to subscribe to LMS events via telnet and process them.
+     - `close_telnet_connection`: Closes the telnet connection and unsubscribes from events.
 
-3. **set_update_ui_callback Function:**
-   - **Purpose:** Sets the callback function for updating the UI.
-   - **Args:** `callback (function)`: The callback function to set.
-
-4. **connect_to_lms Function:**
-   - **Purpose:** Establishes a telnet connection to the LMS server using settings from the configuration.
-   - **Returns:** `telnetlib.Telnet`: A telnet connection instance.
-   - **Steps:** Attempts to connect to LMS, retries every 5 seconds if connection fails.
-
-5. **process_event Function:**
-   - **Purpose:** Processes the most recent event data from the queue.
-   - **Steps:** Debounces the events, fetches LMS data, and triggers the UI update callback.
-
-6. **subscribe_to_events Function:**
-   - **Purpose:** Subscribes to events from the LMS server and adds them to the event queue.
-   - **Args:** `tn (telnetlib.Telnet)`: A telnet connection instance.
-   - **Steps:** Reads events from LMS and puts them in the event queue.
-
-7. **start_telnet_subscriber Function:**
-   - **Purpose:** Starts threads to subscribe to LMS events via telnet and process them.
-   - **Steps:** Starts telnet subscription and event processing threads.
-
-8. **close_telnet_connection Function:**
-   - **Purpose:** Closes the telnet connection and unsubscribes from events.
-   - **Steps:** Sends unsubscribe command to LMS and closes the connection.
+3. **Global Instance:**
+   - `telnet_handler`: An instance of the `TelnetHandler` class, used to manage the telnet connection and events.
 
 """
-

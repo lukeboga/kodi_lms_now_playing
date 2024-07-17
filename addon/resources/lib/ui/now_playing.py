@@ -1,15 +1,15 @@
 import xbmc
 import xbmcgui
 from resources.lib.api.fetch_lms_status import fetch_lms_status
-from resources.lib.api.get_now_playing import get_now_playing
-from resources.lib.api.get_playlist import get_playlist
+from resources.lib.api.lms_data_processing import get_now_playing, get_playlist
 from resources.lib.utils.log_message import log_message
-from resources.lib.api.telnet_handler import set_update_ui_callback  # Import the callback setter
+from resources.lib.api.telnet_handler import telnet_handler  # Import the telnet handler instance
+from resources.lib.ui.ui_updates import update_now_playing, update_playlist  # Import the UI update functions
 
 class NowPlaying(xbmcgui.WindowXML):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        set_update_ui_callback(self.update_ui)  # Set the update UI callback
+        telnet_handler.set_update_ui_callback(self.update_ui)  # Set the update UI callback
 
     def onInit(self):
         """
@@ -20,7 +20,9 @@ class NowPlaying(xbmcgui.WindowXML):
         self.init_elems()
 
     def init_elems(self):
-        # Initialize controls
+        """
+        Initialize UI controls and populate them with data.
+        """
         self.artwork_background = self.getControl(1)
         self.artwork = self.getControl(2)
         self.now_playing_title = self.getControl(3)
@@ -28,9 +30,7 @@ class NowPlaying(xbmcgui.WindowXML):
         self.now_playing_artist = self.getControl(5)
         self.playlist = self.getControl(6)
 
-        # Populate UI elements
-        self.populate_now_playing()
-        self.populate_playlist()
+        self.update_ui(self.lms_data)
 
     def update_ui(self, lms_data):
         """
@@ -40,62 +40,19 @@ class NowPlaying(xbmcgui.WindowXML):
             lms_data (dict): The LMS data received from the telnet handler.
         """
         self.lms_data = lms_data
-        self.populate_now_playing()
-        self.populate_playlist()
+        update_now_playing(self, self.lms_data)
+        update_playlist(self, self.lms_data)
 
-    def populate_now_playing(self):
-        """
-        Populates the 'now playing' UI elements with the current track's information.
-        """
-        now_playing_data = get_now_playing(self.lms_data)
-        
-        if now_playing_data:
-            # Update the labels with the now playing data
-            self.now_playing_title.setLabel(now_playing_data['title'])
-            self.now_playing_album.setLabel(now_playing_data['album'])
-            self.now_playing_artist.setLabel(now_playing_data['artist'])
-
-            # Update the artwork images
-            artwork_url = now_playing_data.get('artwork_url', 'special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg')
-            self.artwork_background.setImage(artwork_url)
-            self.artwork.setImage(artwork_url)
-        else:
-            log_message("No 'now playing' information available.", xbmc.LOGWARNING)
-            # Clear the labels if no data is available
-            self.now_playing_title.setLabel("")
-            self.now_playing_album.setLabel("")
-            self.now_playing_artist.setLabel("")
-            # Set default artwork
-            default_artwork = 'special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg'
-            self.artwork_background.setImage(default_artwork)
-            self.artwork.setImage(default_artwork)
-
-    def populate_playlist(self):
-        """
-        Populates the playlist UI element with the current playlist's information.
-        """
-        playlist_data = get_playlist(self.lms_data)
-        
-        if playlist_data:
-            # Update playlist items
-            self.playlist.reset()
-            
-            for index, item in enumerate(playlist_data):
-                li = xbmcgui.ListItem(label=item['title'])
-                li.setProperty("id", str(100 + index))
-                info_tag = li.getMusicInfoTag()
-                info_tag.setAlbum(item['album'])
-                info_tag.setArtist(item['artist'])
-                
-                self.playlist.addItem(li)
-        else:
-            log_message("No 'now playing' information available.", xbmc.LOGWARNING)
-    
     def onClick(self, controlId):
         pass
 
     def onAction(self, action):
-        # This method is called when an action is performed
+        """
+        Handle action events in the UI.
+
+        Args:
+            action: The action that was performed.
+        """
         if action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
             self.close()
 
@@ -106,7 +63,8 @@ Detailed Explanation for Beginners:
 1. **Importing Necessary Modules:**
    - `xbmc`: Part of the Kodi API, used for various Kodi functionalities.
    - `xbmcgui`: Part of the Kodi API, used for GUI functionalities.
-   - `fetch_lms_status`, `get_now_playing`, `get_playlist`, `log_message`, `set_update_ui_callback`: Custom utility functions and modules.
+   - `fetch_lms_status`, `get_now_playing`, `get_playlist`, `log_message`, `telnet_handler`: Custom utility functions and modules.
+   - `update_now_playing`, `update_playlist`: Functions from `ui_updates.py` for updating the UI elements.
 
 2. **NowPlaying Class:**
    - **Purpose:** Manages the 'Now Playing' window in the Kodi addon.
@@ -127,24 +85,15 @@ Detailed Explanation for Beginners:
 6. **update_ui Method:**
    - **Purpose:** Updates the UI based on the LMS data received.
    - **Args:** `lms_data (dict)`: The LMS data received from the telnet handler.
-   - **Steps:** Updates the LMS data and populates the UI elements.
+   - **Steps:** Updates the LMS data and populates the UI elements using `update_now_playing` and `update_playlist` functions.
 
-7. **populate_now_playing Method:**
-   - **Purpose:** Populates the 'now playing' UI elements with the current track's information.
-   - **Steps:** Updates the labels and artwork images with 'now playing' data.
-
-8. **populate_playlist Method:**
-   - **Purpose:** Populates the playlist UI element with the current playlist's information.
-   - **Steps:** Updates the playlist items with data from the playlist.
-
-9. **onClick Method:**
+7. **onClick Method:**
    - **Purpose:** Handles click events on the UI controls.
    - **Args:** `controlId`: The ID of the control that was clicked.
 
-10. **onAction Method:**
-    - **Purpose:** Handles action events in the UI.
-    - **Args:** `action`: The action that was performed.
-    - **Steps:** Closes the window if the action is to go back or exit.
-
+8. **onAction Method:**
+   - **Purpose:** Handles action events in the UI.
+   - **Args:** `action`: The action that was performed.
+   - **Steps:** Closes the window if the action is to go back or exit.
 """
 
