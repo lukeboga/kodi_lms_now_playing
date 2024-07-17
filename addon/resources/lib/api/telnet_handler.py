@@ -152,6 +152,7 @@ class TelnetHandler:
             except Exception as e:
                 log_message(f"Error closing telnet connection: {e}", LOG_LEVEL_ERROR)
                 log_exception(e)
+        self.telnet_connection = None  # Ensure the connection is set to None
 
 # Instantiate the TelnetHandler
 telnet_handler = TelnetHandler()

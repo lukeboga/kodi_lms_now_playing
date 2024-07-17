@@ -3,6 +3,7 @@ import xbmcaddon
 from resources.lib.utils.log_message import log_message
 from resources.lib.ui.now_playing import NowPlaying
 from resources.lib.utils.addon_monitor import AddonMonitor
+from resources.lib.utils.shutdown_handler import shutdown_addon  # Import the shutdown function
 from resources.lib.utils.constants import (
     LOG_LEVEL_ERROR,
     NOW_PLAYING_XML,
@@ -35,7 +36,7 @@ def run_addon():
         log_message(f"Error in run_addon: {e}", LOG_LEVEL_ERROR)
     finally:
         # Ensure the addon shuts down cleanly, closing any open connections and cleaning up resources
-        monitor.shutdown()
+        shutdown_addon()
 
 if __name__ == '__main__':
     """
@@ -68,6 +69,5 @@ Detailed Explanation for Beginners:
    - The script includes error handling to log any exceptions that occur during execution, making it easier to debug issues.
 
 6. **Clean Shutdown:**
-   - The `finally` block in the `run_addon` function ensures that the addon shuts down cleanly by calling the `shutdown` method of the `AddonMonitor`.
+   - The `finally` block in the `run_addon` function ensures that the addon shuts down cleanly by calling the `shutdown_addon` function.
 """
-

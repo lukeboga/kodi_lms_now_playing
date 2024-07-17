@@ -5,6 +5,7 @@ from resources.lib.api.lms_data_processing import get_now_playing, get_playlist
 from resources.lib.utils.log_message import log_message
 from resources.lib.api.telnet_handler import telnet_handler  # Import the telnet handler instance
 from resources.lib.ui.ui_updates import update_now_playing, update_playlist  # Import the UI update functions
+from resources.lib.utils.shutdown_handler import shutdown_addon  # Import the shutdown function
 from resources.lib.utils.constants import (
     LOG_LEVEL_INFO,
     CONTROL_ID_ARTWORK_BACKGROUND,
@@ -63,6 +64,7 @@ class NowPlaying(xbmcgui.WindowXML):
             action: The action that was performed.
         """
         if action == xbmcgui.ACTION_PREVIOUS_MENU or action == xbmcgui.ACTION_NAV_BACK:
+            shutdown_addon()
             self.close()
 
 """
@@ -74,6 +76,7 @@ Detailed Explanation for Beginners:
    - `xbmcgui`: Part of the Kodi API, used for GUI functionalities.
    - `fetch_lms_status`, `get_now_playing`, `get_playlist`, `log_message`, `telnet_handler`: Custom utility functions and modules.
    - `update_now_playing`, `update_playlist`: Functions from `ui_updates.py` for updating the UI elements.
+   - `shutdown_addon`: The shutdown function imported from `shutdown_handler.py`.
    - `LOG_LEVEL_INFO`, `CONTROL_ID_ARTWORK_BACKGROUND`, `CONTROL_ID_ARTWORK`, `CONTROL_ID_NOW_PLAYING_TITLE`, `CONTROL_ID_NOW_PLAYING_ALBUM`, `CONTROL_ID_NOW_PLAYING_ARTIST`, `CONTROL_ID_PLAYLIST`: Constants imported from `constants.py`.
 
 2. **NowPlaying Class:**
@@ -104,7 +107,6 @@ Detailed Explanation for Beginners:
 8. **onAction Method:**
    - **Purpose:** Handles action events in the UI.
    - **Args:** `action`: The action that was performed.
-   - **Steps:** Closes the window if the action is to go back or exit.
+   - **Steps:** Calls `shutdown_addon` and closes the window if the action is to go back or exit.
 """
-
 
