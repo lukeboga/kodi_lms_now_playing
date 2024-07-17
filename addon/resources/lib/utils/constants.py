@@ -1,3 +1,5 @@
+import xbmc
+
 """
 This module defines constants used throughout the KLMS Addon.
 """
@@ -21,9 +23,9 @@ DEFAULT_LMS_PLAYER_ID = "ab:7a:56:8b:fd:0f"
 DEFAULT_LMS_TELNET_PORT = 59090
 
 # Log Levels
-LOG_LEVEL_INFO = "INFO"
-LOG_LEVEL_WARNING = "WARNING"
-LOG_LEVEL_ERROR = "ERROR"
+LOG_LEVEL_INFO = xbmc.LOGINFO
+LOG_LEVEL_WARNING = xbmc.LOGWARNING
+LOG_LEVEL_ERROR = xbmc.LOGERROR
 
 # Telnet Commands
 TELNET_SUBSCRIBE_COMMAND = b"subscribe playlist\n"
@@ -31,6 +33,23 @@ TELNET_UNSUBSCRIBE_COMMAND = b"subscribe 0\n"
 
 # File Paths
 DEFAULT_ARTWORK_PATH = "special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg"
+
+# Debounce time in seconds
+DEBOUNCE_TIME = 1.0
+
+# Timeout in seconds for socket connection attempts
+SOCKET_TIMEOUT = 2
+
+# JSON-RPC Request Details
+JSON_RPC_URL_TEMPLATE = "http://{server}:{port}/jsonrpc.js"
+JSON_RPC_PAYLOAD_TEMPLATE = {
+    "method": "slim.request",
+    "params": None,  # To be filled dynamically
+    "id": 1
+}
+
+# Content-Type Header
+CONTENT_TYPE_HEADER = {"Content-Type": "application/json"}
 
 """
 Detailed Explanation for Beginners:
@@ -59,5 +78,17 @@ Detailed Explanation for Beginners:
 
 7. **File Paths:**
    - Paths for default artwork and other resources.
+
+8. **Debounce Time:**
+   - Constant for the debounce time used in event processing.
+
+9. **Socket Timeout:**
+   - Constant for the timeout duration for socket connection attempts.
+
+10. **JSON-RPC Request Details:**
+    - Constants for constructing the JSON-RPC URL and payload templates.
+
+11. **Content-Type Header:**
+    - Constant for the Content-Type header used in HTTP requests.
 """
 
