@@ -5,6 +5,7 @@ from resources.lib.api.telnet_handler import telnet_handler  # Import the telnet
 from resources.lib.utils.read_settings import read_settings  # Import the settings reader function
 from resources.lib.utils.constants import (
     LOG_LEVEL_INFO,
+    LOG_LEVEL_ERROR,
     INIT_MSG_START,
     INIT_MSG_COMPLETE,
     SHUTDOWN_MSG_START,
@@ -27,11 +28,14 @@ class AddonMonitor(xbmc.Monitor):
         Initialize the KLMS Addon.
         Load settings and establish necessary connections.
         """
-        log_message(INIT_MSG_START, LOG_LEVEL_INFO)
-        self.settings = read_settings()
-        # Add other initialization tasks here
-        telnet_handler.start_telnet_subscriber()
-        log_message(INIT_MSG_COMPLETE, LOG_LEVEL_INFO)
+        try:
+            log_message(INIT_MSG_START, LOG_LEVEL_INFO)
+            self.settings = read_settings()
+            # Add other initialization tasks here
+            telnet_handler.start_telnet_subscriber()
+            log_message(INIT_MSG_COMPLETE, LOG_LEVEL_INFO)
+        except Exception as e:
+            log_message(f"Initialization error: {e}", LOG_LEVEL_ERROR)
 
     def onAbortRequested(self):
         """
@@ -46,16 +50,19 @@ class AddonMonitor(xbmc.Monitor):
         Handle the clean shutdown of the KLMS Addon.
         Close any open connections and clean up resources.
         """
-        log_message(SHUTDOWN_MSG_START, LOG_LEVEL_INFO)
-        
-        # Close the requests session
-        if requests_session:
-            requests_session.close()
-        
-        # Close the telnet connection
-        telnet_handler.close_telnet_connection()
-        
-        log_message(SHUTDOWN_MSG_COMPLETE, LOG_LEVEL_INFO)
+        try:
+            log_message(SHUTDOWN_MSG_START, LOG_LEVEL_INFO)
+            
+            # Close the requests session
+            if requests_session:
+                requests_session.close()
+            
+            # Close the telnet connection
+            telnet_handler.close_telnet_connection()
+            
+            log_message(SHUTDOWN_MSG_COMPLETE, LOG_LEVEL_INFO)
+        except Exception as e:
+            log_message(f"Shutdown error: {e}", LOG_LEVEL_ERROR)
 
 """
 Detailed Explanation for Beginners:
@@ -84,6 +91,7 @@ Detailed Explanation for Beginners:
      - Reads settings using the `read_settings` function.
      - Starts the telnet subscriber using `telnet_handler.start_telnet_subscriber()`.
      - Logs that the initialization process is complete.
+     - Catches and logs any exceptions that occur during initialization.
 
 5. **onAbortRequested Method:**
    - **Purpose:** This method is called when an abort (exit) request is made. It handles necessary cleanup tasks before the addon is fully exited.
@@ -98,5 +106,5 @@ Detailed Explanation for Beginners:
      - Closes the requests session if it is open.
      - Closes the telnet connection using `telnet_handler.close_telnet_connection()`.
      - Logs that the shutdown process is complete.
+     - Catches and logs any exceptions that occur during shutdown.
 """
-

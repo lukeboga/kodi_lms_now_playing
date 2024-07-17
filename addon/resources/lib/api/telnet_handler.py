@@ -27,6 +27,7 @@ class TelnetHandler:
         self.event_queue = Queue()
         self.debounce_timer = None
         self.update_ui_callback = None
+        self.stop_event = threading.Event()
 
     def set_update_ui_callback(self, callback):
         """
@@ -49,7 +50,7 @@ class TelnetHandler:
         port = int(settings[LMS_TELNET_PORT_KEY])  # Convert port to integer
         tn = None
 
-        while tn is None:
+        while tn is None and not self.stop_event.is_set():
             if not is_port_open(host, port):
                 log_network_issue(f"LMS server port {port} is not open.")
                 time.sleep(RETRY_INTERVAL)
@@ -89,7 +90,7 @@ class TelnetHandler:
             # Clear the debounce timer
             self.debounce_timer = None
 
-        while True:
+        while not self.stop_event.is_set():
             try:
                 # Wait for an event with a timeout to allow thread to exit cleanly
                 event_data = self.event_queue.get(timeout=1)
@@ -111,13 +112,16 @@ class TelnetHandler:
         Args:
             tn (telnetlib.Telnet): A telnet connection instance.
         """
-        while True:
+        while not self.stop_event.is_set():
             try:
                 response = tn.read_until(b"\n")
                 self.event_queue.put(response.decode('utf-8'))
             except EOFError:
                 log_message("Connection lost, reconnecting...", LOG_LEVEL_WARNING)
                 self.connect_to_lms()
+            except AttributeError:
+                if self.stop_event.is_set():
+                    break
 
     def start_telnet_subscriber(self):
         """
@@ -139,6 +143,7 @@ class TelnetHandler:
         """
         Close the telnet connection and unsubscribe from events.
         """
+        self.stop_event.set()
         if self.telnet_connection:
             try:
                 self.telnet_connection.write(TELNET_UNSUBSCRIBE_COMMAND)  # Unsubscribe from playlist events
@@ -178,6 +183,4 @@ Detailed Explanation for Beginners:
 
 3. **Global Instance:**
    - `telnet_handler`: An instance of the `TelnetHandler` class, used to manage the telnet connection and events.
-
 """
-
