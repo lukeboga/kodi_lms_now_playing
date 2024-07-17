@@ -4,7 +4,6 @@ import xbmc
 from queue import Queue, Empty
 from resources.lib.utils.read_settings import read_settings
 from resources.lib.utils.log_message import log_message
-from resources.lib.utils.error_handling import log_exception
 from resources.lib.deps import telnetlib
 from resources.lib.api.fetch_lms_status import fetch_lms_status  # Ensure this is imported to fetch LMS status
 
@@ -45,7 +44,6 @@ def connect_to_lms():
             log_message("Connected to LMS via telnet.")
         except Exception as e:
             log_message(f"Connection failed, retrying in 5 seconds... Error: {e}", xbmc.LOGERROR)
-            log_exception(e)
             time.sleep(5)
 
     telnet_connection = tn
@@ -103,7 +101,7 @@ def subscribe_to_events(tn):
             event_queue.put(response.decode('utf-8'))
         except EOFError:
             log_message("Connection lost, reconnecting...", xbmc.LOGWARNING)
-            connect_to_lms()
+            tn = connect_to_lms()
 
 def start_telnet_subscriber():
     """
@@ -135,48 +133,4 @@ def close_telnet_connection():
             log_message("Telnet connection closed and unsubscribed from events.", xbmc.LOGINFO)
         except Exception as e:
             log_message(f"Error closing telnet connection: {e}", xbmc.LOGERROR)
-            log_exception(e)
-
-"""
-Detailed Explanation for Beginners:
------------------------------------
-
-1. **Importing Necessary Modules:**
-   - `xbmc`: Part of the Kodi API, used for logging.
-   - `threading`: For handling multiple threads.
-   - `time`: For handling time-related functions.
-   - `Queue, Empty`: For handling queue operations and exceptions.
-   - `read_settings`, `log_message`, `log_exception`, `fetch_lms_status`: Custom utility functions and modules.
-   - `telnetlib`: Imported from `resources.lib.deps`.
-
-2. **Global Variables:**
-   - `telnet_connection`, `subscriber_thread`, `event_queue`, `debounce_timer`, `update_ui_callback`: Various global instances for managing the telnet connection and events.
-
-3. **set_update_ui_callback Function:**
-   - **Purpose:** Sets the callback function for updating the UI.
-   - **Args:** `callback (function)`: The callback function to set.
-
-4. **connect_to_lms Function:**
-   - **Purpose:** Establishes a telnet connection to the LMS server using settings from the configuration.
-   - **Returns:** `telnetlib.Telnet`: A telnet connection instance.
-   - **Steps:** Attempts to connect to LMS, retries every 5 seconds if connection fails.
-
-5. **process_event Function:**
-   - **Purpose:** Processes the most recent event data from the queue.
-   - **Steps:** Debounces the events, fetches LMS data, and triggers the UI update callback.
-
-6. **subscribe_to_events Function:**
-   - **Purpose:** Subscribes to events from the LMS server and adds them to the event queue.
-   - **Args:** `tn (telnetlib.Telnet)`: A telnet connection instance.
-   - **Steps:** Reads events from LMS and puts them in the event queue.
-
-7. **start_telnet_subscriber Function:**
-   - **Purpose:** Starts threads to subscribe to LMS events via telnet and process them.
-   - **Steps:** Starts telnet subscription and event processing threads.
-
-8. **close_telnet_connection Function:**
-   - **Purpose:** Closes the telnet connection and unsubscribes from events.
-   - **Steps:** Sends unsubscribe command to LMS and closes the connection.
-
-"""
 
