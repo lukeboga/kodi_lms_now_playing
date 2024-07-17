@@ -2,6 +2,14 @@
 import xbmc
 import xbmcaddon
 from resources.lib.utils.log_message import log_message
+from resources.lib.utils.constants import (
+    ADDON_SETTING_LMS_SERVER,
+    ADDON_SETTING_LMS_PORT,
+    ADDON_SETTING_LMS_PLAYER_ID,
+    ADDON_SETTING_LMS_TELNET_PORT,
+    SETTINGS_ERROR_MSG,
+    LOG_LEVEL_ERROR
+)
 
 def read_settings():
     """
@@ -17,15 +25,15 @@ def read_settings():
         addon = xbmcaddon.Addon()
         # Read settings from the addon configuration
         settings = {
-            'lms_server': addon.getSetting('lms_server'),
-            'lms_port': addon.getSetting('lms_port'),
-            'lms_player_id': addon.getSetting('lms_player_id'),
-            'lms_telnet_port': addon.getSetting('lms_telnet_port')
+            ADDON_SETTING_LMS_SERVER: addon.getSetting(ADDON_SETTING_LMS_SERVER),
+            ADDON_SETTING_LMS_PORT: addon.getSetting(ADDON_SETTING_LMS_PORT),
+            ADDON_SETTING_LMS_PLAYER_ID: addon.getSetting(ADDON_SETTING_LMS_PLAYER_ID),
+            ADDON_SETTING_LMS_TELNET_PORT: addon.getSetting(ADDON_SETTING_LMS_TELNET_PORT)
         }
         return settings
     except Exception as e:
         # Log any errors encountered during settings retrieval
-        log_message(f"Error reading settings: {e}", xbmc.LOGERROR)
+        log_message(SETTINGS_ERROR_MSG.format(error=e), LOG_LEVEL_ERROR)
         return {}
 
 """
@@ -35,6 +43,7 @@ Detailed Explanation for Beginners:
 1. **Importing Necessary Modules:**
    - `xbmc` and `xbmcaddon` are part of the Kodi API. They provide functionalities to interact with Kodi.
    - `log_message` is a custom function defined in another module to log messages.
+   - Constants imported from `constants.py`.
 
 2. **read_settings Function:**
    - **Purpose:** This function reads and returns the addon's settings from Kodi's configuration.
@@ -49,7 +58,7 @@ Detailed Explanation for Beginners:
      - `settings = { ... }`: This block reads specific settings using `addon.getSetting('setting_id')` and stores them in a dictionary.
      - `return settings`: Returns the dictionary containing the settings.
      - `except Exception as e`: If any error occurs during this process, it is caught and handled here.
-     - `log_message(f"Error reading settings: {e}", xbmc.LOGERROR)`: Logs the error message.
+     - `log_message(SETTINGS_ERROR_MSG.format(error=e), LOG_LEVEL_ERROR)`: Logs the error message.
      - `return {}`: Returns an empty dictionary if an error occurs.
 """
 

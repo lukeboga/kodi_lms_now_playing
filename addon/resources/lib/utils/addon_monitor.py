@@ -3,6 +3,14 @@ from resources.lib.utils.log_message import log_message  # Custom function for l
 from resources.lib.api.fetch_lms_status import requests_session  # Import the global requests session
 from resources.lib.api.telnet_handler import telnet_handler  # Import the telnet handler instance
 from resources.lib.utils.read_settings import read_settings  # Import the settings reader function
+from resources.lib.utils.constants import (
+    LOG_LEVEL_INFO,
+    INIT_MSG_START,
+    INIT_MSG_COMPLETE,
+    SHUTDOWN_MSG_START,
+    SHUTDOWN_MSG_COMPLETE,
+    ABORT_MSG
+)
 
 class AddonMonitor(xbmc.Monitor):
     """
@@ -19,18 +27,18 @@ class AddonMonitor(xbmc.Monitor):
         Initialize the KLMS Addon.
         Load settings and establish necessary connections.
         """
-        log_message("Initializing KLMS Addon...", xbmc.LOGINFO)
+        log_message(INIT_MSG_START, LOG_LEVEL_INFO)
         self.settings = read_settings()
         # Add other initialization tasks here
         telnet_handler.start_telnet_subscriber()
-        log_message("Initialization complete.", xbmc.LOGINFO)
+        log_message(INIT_MSG_COMPLETE, LOG_LEVEL_INFO)
 
     def onAbortRequested(self):
         """
         Called when an abort (exit) request is made.
         This method handles cleanup tasks before the addon is exited.
         """
-        log_message("Abort requested. Shutting down KLMS Addon...", xbmc.LOGINFO)
+        log_message(ABORT_MSG, LOG_LEVEL_INFO)
         self.shutdown()
 
     def shutdown(self):
@@ -38,7 +46,7 @@ class AddonMonitor(xbmc.Monitor):
         Handle the clean shutdown of the KLMS Addon.
         Close any open connections and clean up resources.
         """
-        log_message("Shutting down KLMS Addon.", xbmc.LOGINFO)
+        log_message(SHUTDOWN_MSG_START, LOG_LEVEL_INFO)
         
         # Close the requests session
         if requests_session:
@@ -47,7 +55,7 @@ class AddonMonitor(xbmc.Monitor):
         # Close the telnet connection
         telnet_handler.close_telnet_connection()
         
-        log_message("Shutdown complete.", xbmc.LOGINFO)
+        log_message(SHUTDOWN_MSG_COMPLETE, LOG_LEVEL_INFO)
 
 """
 Detailed Explanation for Beginners:
@@ -59,6 +67,7 @@ Detailed Explanation for Beginners:
    - `requests_session`: The global requests session used for HTTP requests.
    - `telnet_handler`: The instance of the TelnetHandler class to manage the telnet connection.
    - `read_settings`: A function to read addon settings.
+   - Constants imported from `constants.py`.
 
 2. **AddonMonitor Class:**
    - **Purpose:** This class is designed to handle addon-specific events, particularly initialization and shutdown.

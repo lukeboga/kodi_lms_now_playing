@@ -3,6 +3,12 @@ import xbmcaddon
 from resources.lib.utils.log_message import log_message
 from resources.lib.ui.now_playing import NowPlaying
 from resources.lib.utils.addon_monitor import AddonMonitor
+from resources.lib.utils.constants import (
+    LOG_LEVEL_ERROR,
+    NOW_PLAYING_XML,
+    LOG_MSG_FORMAT,
+    ADDON_NAME
+)
 
 def main():
     """
@@ -10,7 +16,7 @@ def main():
     This function determines the action to take based on the arguments passed to the script.
     """
     addon = xbmcaddon.Addon()
-    window = NowPlaying("NowPlaying.xml", addon.getAddonInfo('path'))
+    window = NowPlaying(NOW_PLAYING_XML, addon.getAddonInfo('path'))
     window.doModal()
     del window
 
@@ -26,7 +32,7 @@ def run_addon():
         monitor.waitForAbort()
     except Exception as e:
         # Log any exceptions that occur during execution for debugging purposes
-        log_message(f"Error in run_addon: {e}", xbmc.LOGERROR)
+        log_message(f"Error in run_addon: {e}", LOG_LEVEL_ERROR)
     finally:
         # Ensure the addon shuts down cleanly, closing any open connections and cleaning up resources
         monitor.shutdown()

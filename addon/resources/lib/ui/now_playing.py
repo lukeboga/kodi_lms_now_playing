@@ -5,6 +5,15 @@ from resources.lib.api.lms_data_processing import get_now_playing, get_playlist
 from resources.lib.utils.log_message import log_message
 from resources.lib.api.telnet_handler import telnet_handler  # Import the telnet handler instance
 from resources.lib.ui.ui_updates import update_now_playing, update_playlist  # Import the UI update functions
+from resources.lib.utils.constants import (
+    LOG_LEVEL_INFO,
+    CONTROL_ID_ARTWORK_BACKGROUND,
+    CONTROL_ID_ARTWORK,
+    CONTROL_ID_NOW_PLAYING_TITLE,
+    CONTROL_ID_NOW_PLAYING_ALBUM,
+    CONTROL_ID_NOW_PLAYING_ARTIST,
+    CONTROL_ID_PLAYLIST
+)
 
 class NowPlaying(xbmcgui.WindowXML):
     def __init__(self, *args, **kwargs):
@@ -23,12 +32,12 @@ class NowPlaying(xbmcgui.WindowXML):
         """
         Initialize UI controls and populate them with data.
         """
-        self.artwork_background = self.getControl(1)
-        self.artwork = self.getControl(2)
-        self.now_playing_title = self.getControl(3)
-        self.now_playing_album = self.getControl(4)
-        self.now_playing_artist = self.getControl(5)
-        self.playlist = self.getControl(6)
+        self.artwork_background = self.getControl(CONTROL_ID_ARTWORK_BACKGROUND)
+        self.artwork = self.getControl(CONTROL_ID_ARTWORK)
+        self.now_playing_title = self.getControl(CONTROL_ID_NOW_PLAYING_TITLE)
+        self.now_playing_album = self.getControl(CONTROL_ID_NOW_PLAYING_ALBUM)
+        self.now_playing_artist = self.getControl(CONTROL_ID_NOW_PLAYING_ARTIST)
+        self.playlist = self.getControl(CONTROL_ID_PLAYLIST)
 
         self.update_ui(self.lms_data)
 
@@ -65,6 +74,7 @@ Detailed Explanation for Beginners:
    - `xbmcgui`: Part of the Kodi API, used for GUI functionalities.
    - `fetch_lms_status`, `get_now_playing`, `get_playlist`, `log_message`, `telnet_handler`: Custom utility functions and modules.
    - `update_now_playing`, `update_playlist`: Functions from `ui_updates.py` for updating the UI elements.
+   - `LOG_LEVEL_INFO`, `CONTROL_ID_ARTWORK_BACKGROUND`, `CONTROL_ID_ARTWORK`, `CONTROL_ID_NOW_PLAYING_TITLE`, `CONTROL_ID_NOW_PLAYING_ALBUM`, `CONTROL_ID_NOW_PLAYING_ARTIST`, `CONTROL_ID_PLAYLIST`: Constants imported from `constants.py`.
 
 2. **NowPlaying Class:**
    - **Purpose:** Manages the 'Now Playing' window in the Kodi addon.
@@ -96,4 +106,5 @@ Detailed Explanation for Beginners:
    - **Args:** `action`: The action that was performed.
    - **Steps:** Closes the window if the action is to go back or exit.
 """
+
 

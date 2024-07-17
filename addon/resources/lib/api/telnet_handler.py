@@ -8,6 +8,17 @@ from resources.lib.utils.error_handling import log_exception
 from resources.lib.deps import telnetlib
 from resources.lib.api.fetch_lms_status import fetch_lms_status
 from resources.lib.utils.network_utils import is_port_open, log_network_issue
+from resources.lib.utils.constants import (
+    LMS_SERVER_KEY,
+    LMS_TELNET_PORT_KEY,
+    LOG_LEVEL_INFO,
+    LOG_LEVEL_WARNING,
+    LOG_LEVEL_ERROR,
+    TELNET_SUBSCRIBE_COMMAND,
+    TELNET_UNSUBSCRIBE_COMMAND,
+    DEBOUNCE_TIME,
+    RETRY_INTERVAL
+)
 
 class TelnetHandler:
     def __init__(self):
@@ -34,24 +45,24 @@ class TelnetHandler:
             telnetlib.Telnet: A telnet connection instance.
         """
         settings = read_settings()
-        host = settings['lms_server']
-        port = int(settings['lms_telnet_port'])  # Convert port to integer
+        host = settings[LMS_SERVER_KEY]
+        port = int(settings[LMS_TELNET_PORT_KEY])  # Convert port to integer
         tn = None
 
         while tn is None:
             if not is_port_open(host, port):
                 log_network_issue(f"LMS server port {port} is not open.")
-                time.sleep(5)
+                time.sleep(RETRY_INTERVAL)
                 continue
 
             try:
                 tn = telnetlib.Telnet(host, port)
-                tn.write(b"subscribe playlist\n")  # Subscribe to playlist events
-                log_message("Connected to LMS via telnet.")
+                tn.write(TELNET_SUBSCRIBE_COMMAND)  # Subscribe to playlist events
+                log_message("Connected to LMS via telnet.", LOG_LEVEL_INFO)
             except Exception as e:
-                log_message(f"Connection failed, retrying in 5 seconds... Error: {e}", xbmc.LOGERROR)
+                log_message(f"Connection failed, retrying in {RETRY_INTERVAL} seconds... Error: {e}", LOG_LEVEL_ERROR)
                 log_exception(e)
-                time.sleep(5)
+                time.sleep(RETRY_INTERVAL)
 
         self.telnet_connection = tn
         return tn
@@ -69,7 +80,7 @@ class TelnetHandler:
 
             # Fetch LMS data
             lms_data = fetch_lms_status()
-            log_message(f"Received event: {event_data}")
+            log_message(f"Received event: {event_data}", LOG_LEVEL_INFO)
 
             # Trigger the UI update callback if it's set
             if self.update_ui_callback:
@@ -88,7 +99,7 @@ class TelnetHandler:
                         self.debounce_timer.cancel()
 
                     # Start a new timer
-                    self.debounce_timer = threading.Timer(1.0, handle_event, args=(event_data,))  # 1-second debounce time
+                    self.debounce_timer = threading.Timer(DEBOUNCE_TIME, handle_event, args=(event_data,))  # 1-second debounce time
                     self.debounce_timer.start()
             except Empty:
                 continue
@@ -105,7 +116,7 @@ class TelnetHandler:
                 response = tn.read_until(b"\n")
                 self.event_queue.put(response.decode('utf-8'))
             except EOFError:
-                log_message("Connection lost, reconnecting...", xbmc.LOGWARNING)
+                log_message("Connection lost, reconnecting...", LOG_LEVEL_WARNING)
                 self.connect_to_lms()
 
     def start_telnet_subscriber(self):
@@ -130,11 +141,11 @@ class TelnetHandler:
         """
         if self.telnet_connection:
             try:
-                self.telnet_connection.write(b"subscribe 0\n")  # Unsubscribe from playlist events
+                self.telnet_connection.write(TELNET_UNSUBSCRIBE_COMMAND)  # Unsubscribe from playlist events
                 self.telnet_connection.close()
-                log_message("Telnet connection closed and unsubscribed from events.", xbmc.LOGINFO)
+                log_message("Telnet connection closed and unsubscribed from events.", LOG_LEVEL_INFO)
             except Exception as e:
-                log_message(f"Error closing telnet connection: {e}", xbmc.LOGERROR)
+                log_message(f"Error closing telnet connection: {e}", LOG_LEVEL_ERROR)
                 log_exception(e)
 
 # Instantiate the TelnetHandler
@@ -152,6 +163,7 @@ Detailed Explanation for Beginners:
    - `read_settings`, `log_message`, `log_exception`, `fetch_lms_status`: Custom utility functions and modules.
    - `telnetlib`: Imported from `resources.lib.deps`.
    - `is_port_open`, `log_network_issue`: Custom network utility functions for checking if a port is open and logging network issues.
+   - `LMS_SERVER_KEY`, `LMS_TELNET_PORT_KEY`, `LOG_LEVEL_INFO`, `LOG_LEVEL_WARNING`, `LOG_LEVEL_ERROR`, `TELNET_SUBSCRIBE_COMMAND`, `TELNET_UNSUBSCRIBE_COMMAND`, `DEBOUNCE_TIME`, `RETRY_INTERVAL`: Constants imported from `constants.py`.
 
 2. **TelnetHandler Class:**
    - **Purpose:** Manages the telnet connection, event subscription, and event processing for the KLMS Addon.
@@ -168,3 +180,4 @@ Detailed Explanation for Beginners:
    - `telnet_handler`: An instance of the `TelnetHandler` class, used to manage the telnet connection and events.
 
 """
+

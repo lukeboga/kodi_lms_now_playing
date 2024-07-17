@@ -2,6 +2,17 @@ import xbmc
 import xbmcgui
 from resources.lib.api.lms_data_processing import get_now_playing, get_playlist
 from resources.lib.utils.log_message import log_message
+from resources.lib.utils.constants import (
+    LOG_LEVEL_WARNING,
+    CONTROL_ID_ARTWORK_BACKGROUND,
+    CONTROL_ID_ARTWORK,
+    CONTROL_ID_NOW_PLAYING_TITLE,
+    CONTROL_ID_NOW_PLAYING_ALBUM,
+    CONTROL_ID_NOW_PLAYING_ARTIST,
+    CONTROL_ID_PLAYLIST,
+    DEFAULT_ARTWORK_PATH,
+    LISTITEM_ID_PREFIX
+)
 
 def update_now_playing(window, lms_data):
     """
@@ -17,7 +28,7 @@ def update_now_playing(window, lms_data):
         set_now_playing_labels(window, now_playing_data)
         set_now_playing_artwork(window, now_playing_data['artwork_url'])
     else:
-        log_message("No 'now playing' information available.", xbmc.LOGWARNING)
+        log_message("No 'now playing' information available.", LOG_LEVEL_WARNING)
         clear_now_playing_labels(window)
         set_default_artwork(window)
 
@@ -34,7 +45,7 @@ def update_playlist(window, lms_data):
     if playlist_data:
         update_playlist_items(window, playlist_data)
     else:
-        log_message("No playlist information available.", xbmc.LOGWARNING)
+        log_message("No playlist information available.", LOG_LEVEL_WARNING)
 
 def set_now_playing_labels(window, now_playing_data):
     """
@@ -44,9 +55,9 @@ def set_now_playing_labels(window, now_playing_data):
         window (xbmcgui.WindowXML): The window object containing the UI elements.
         now_playing_data (dict): The 'now playing' data to use for updating the UI.
     """
-    window.getControl(3).setLabel(now_playing_data['title'])
-    window.getControl(4).setLabel(now_playing_data['album'])
-    window.getControl(5).setLabel(now_playing_data['artist'])
+    window.getControl(CONTROL_ID_NOW_PLAYING_TITLE).setLabel(now_playing_data['title'])
+    window.getControl(CONTROL_ID_NOW_PLAYING_ALBUM).setLabel(now_playing_data['album'])
+    window.getControl(CONTROL_ID_NOW_PLAYING_ARTIST).setLabel(now_playing_data['artist'])
 
 def set_now_playing_artwork(window, artwork_url):
     """
@@ -56,9 +67,9 @@ def set_now_playing_artwork(window, artwork_url):
         window (xbmcgui.WindowXML): The window object containing the UI elements.
         artwork_url (str): The URL of the artwork to display.
     """
-    artwork_url = artwork_url or 'special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg'
-    window.getControl(1).setImage(artwork_url)
-    window.getControl(2).setImage(artwork_url)
+    artwork_url = artwork_url or DEFAULT_ARTWORK_PATH
+    window.getControl(CONTROL_ID_ARTWORK_BACKGROUND).setImage(artwork_url)
+    window.getControl(CONTROL_ID_ARTWORK).setImage(artwork_url)
 
 def clear_now_playing_labels(window):
     """
@@ -67,9 +78,9 @@ def clear_now_playing_labels(window):
     Args:
         window (xbmcgui.WindowXML): The window object containing the UI elements.
     """
-    window.getControl(3).setLabel("")
-    window.getControl(4).setLabel("")
-    window.getControl(5).setLabel("")
+    window.getControl(CONTROL_ID_NOW_PLAYING_TITLE).setLabel("")
+    window.getControl(CONTROL_ID_NOW_PLAYING_ALBUM).setLabel("")
+    window.getControl(CONTROL_ID_NOW_PLAYING_ARTIST).setLabel("")
 
 def set_default_artwork(window):
     """
@@ -78,9 +89,8 @@ def set_default_artwork(window):
     Args:
         window (xbmcgui.WindowXML): The window object containing the UI elements.
     """
-    default_artwork = 'special://home/addons/plugin.program.klmsaddon/resources/media/demo-cover.jpg'
-    window.getControl(1).setImage(default_artwork)
-    window.getControl(2).setImage(default_artwork)
+    window.getControl(CONTROL_ID_ARTWORK_BACKGROUND).setImage(DEFAULT_ARTWORK_PATH)
+    window.getControl(CONTROL_ID_ARTWORK).setImage(DEFAULT_ARTWORK_PATH)
 
 def update_playlist_items(window, playlist_data):
     """
@@ -90,12 +100,12 @@ def update_playlist_items(window, playlist_data):
         window (xbmcgui.WindowXML): The window object containing the UI elements.
         playlist_data (list): The playlist data to use for updating the UI.
     """
-    playlist_control = window.getControl(6)
+    playlist_control = window.getControl(CONTROL_ID_PLAYLIST)
     playlist_control.reset()
     
     for index, item in enumerate(playlist_data):
         li = xbmcgui.ListItem(label=item['title'])
-        li.setProperty("id", str(100 + index))
+        li.setProperty("id", str(LISTITEM_ID_PREFIX + index))
         info_tag = li.getMusicInfoTag()
         info_tag.setAlbum(item['album'])
         info_tag.setArtist(item['artist'])
@@ -110,6 +120,7 @@ Detailed Explanation for Beginners:
    - `xbmc`, `xbmcgui`: Part of the Kodi API, used for various Kodi functionalities.
    - `get_now_playing`, `get_playlist`: Custom utility functions for getting now playing and playlist data.
    - `log_message`: Custom function for logging messages.
+   - Constants imported from `constants.py`.
 
 2. **update_now_playing Function:**
    - **Purpose:** Updates the 'now playing' UI elements with the current track's information.
@@ -137,7 +148,6 @@ Detailed Explanation for Beginners:
    - **clear_now_playing_labels:** Clears the 'now playing' labels.
    - **set_default_artwork:** Sets the default artwork.
    - **update_playlist_items:** Updates the playlist items in the UI.
-
 """
 
 

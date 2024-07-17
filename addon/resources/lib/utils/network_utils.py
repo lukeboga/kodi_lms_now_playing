@@ -5,8 +5,16 @@ import socket
 from contextlib import closing
 from resources.lib.utils.log_message import log_message
 import xbmc  # Ensure xbmc is imported for logging levels
+from resources.lib.utils.constants import (
+    RETRY_COUNT,
+    BACKOFF_FACTOR,
+    STATUS_FORCE_LIST,
+    SOCKET_TIMEOUT,
+    LOG_LEVEL_ERROR,
+    NETWORK_ISSUE_LOG_MSG
+)
 
-def create_requests_session(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504)):
+def create_requests_session(retries=RETRY_COUNT, backoff_factor=BACKOFF_FACTOR, status_forcelist=STATUS_FORCE_LIST):
     """
     Create a requests session with retry logic.
 
@@ -38,7 +46,7 @@ def create_requests_session(retries=3, backoff_factor=0.3, status_forcelist=(500
         log_network_issue(f"Failed to create requests session: {e}")
         raise
 
-def is_port_open(host, port, timeout=2):
+def is_port_open(host, port, timeout=SOCKET_TIMEOUT):
     """
     Check if a port is open on a given host.
 
@@ -66,7 +74,7 @@ def log_network_issue(message):
     Args:
         message (str): The message to log.
     """
-    log_message(f"Network issue: {message}", xbmc.LOGERROR)
+    log_message(NETWORK_ISSUE_LOG_MSG.format(message=message), LOG_LEVEL_ERROR)
 
 """
 Detailed Explanation for Beginners:
@@ -77,6 +85,7 @@ Detailed Explanation for Beginners:
    - `socket`, `closing`: Used for checking if a port is open.
    - `log_message`: Custom function for logging messages.
    - `xbmc`: Part of the Kodi API, used for logging levels.
+   - Constants imported from `constants.py`.
 
 2. **create_requests_session Function:**
    - **Purpose:** Creates a requests session with retry logic.
@@ -107,8 +116,6 @@ Detailed Explanation for Beginners:
 4. **log_network_issue Function:**
    - **Purpose:** Logs a network-related issue.
    - **Args:**
-     - `message (str)`: The message to log.
-   - **Steps:**
-     - Uses the `log_message` function to log the network issue with an error level.
-"""
+     - `message (str)
 
+"""
