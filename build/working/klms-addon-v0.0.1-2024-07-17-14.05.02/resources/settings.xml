@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+    <category label="General">
+        <setting id="lms_server" type="text" label="LMS: Server Address" default="192.168.1.201" />
+        <setting id="lms_port" type="number" label="LMS: Port" default="9000" />
+        <setting id="lms_player_id" type="text" label="LMS: Player ID" default="ab:7a:56:8b:fd:0f" />
+        <setting id="lms_telnet_port" type="number" label="LMS: Telnet Port" default="59090" />
+    </category>
+</settings>
+
+<!-- Detailed Explanation for Beginners:
+
+1. **Purpose of the File:**
+   - This XML file defines the settings for the KLMS Addon.
+   - It allows users to configure essential parameters for the addon to connect to the Logitech Media Server (LMS).
+
+2. **Settings Category:**
+   - `<category label="General">`: This creates a category in the Kodi addon settings UI labeled "General".
+
+3. **Settings Defined:**
+   - `lms_server`: A text field for entering the LMS server address. Default value is set to "192.168.1.201".
+   - `lms_port`: A number field for specifying the port on which LMS is running. Default value is "9000".
+   - `lms_player_id`: A text field for entering the player ID. Default value is "ab:7a:56:8b:fd:0f".
+   - `lms_telnet_port`: A number field for specifying the port for telnet connection to LMS. Default value is "59090".
+
+4. **User Interface:**
+   - These settings will appear in the addon settings menu within Kodi, allowing users to configure them as needed.
+-->
+
