@@ -51,6 +51,11 @@ JSON_RPC_PAYLOAD_TEMPLATE = {
 # Content-Type Header
 CONTENT_TYPE_HEADER = {"Content-Type": "application/json"}
 
+# LMS JSON Keys
+LMS_RESULT_KEY = "result"
+LMS_PLAYLIST_LOOP_KEY = "playlist_loop"
+LMS_TIME_KEY = "time"
+
 """
 Detailed Explanation for Beginners:
 -----------------------------------
@@ -90,5 +95,8 @@ Detailed Explanation for Beginners:
 
 11. **Content-Type Header:**
     - Constant for the Content-Type header used in HTTP requests.
+
+12. **LMS JSON Keys:**
+    - Keys for parsing JSON response from the LMS server.
 """
 
