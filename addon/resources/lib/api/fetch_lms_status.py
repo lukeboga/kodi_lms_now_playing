@@ -29,7 +29,7 @@ def fetch_lms_status():
     try:
         response = send_request(url, payload)
         data = parse_response(response)
-        log_beautified_json(data)
+        log_message("New 'now playing' received")
         return data
     except (requests.RequestException, KeyError, IndexError) as e:
         log_network_issue(f"Failed to fetch LMS status: {e}")
