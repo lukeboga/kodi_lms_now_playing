@@ -180,9 +180,27 @@ class TelnetHandler:
     def close_telnet_connection(self):
         """
         Close the telnet connection and unsubscribe from events.
+        Ensure all threads, events, and resources are properly terminated and cleaned up.
         """
+        # Set the stop event to signal all threads to stop
         self.stop_event.set()
-        self.event_available.set()  # Ensure the event processor wakes up to exit
+        
+        # Signal the event_available to wake up the process_event method if it's waiting
+        self.event_available.set()
+        
+        # Join the subscriber_thread to ensure it has completed
+        if self.subscriber_thread is not None:
+            self.subscriber_thread.join(timeout=5)
+            if self.subscriber_thread.is_alive():
+                log_message("Warning: subscriber_thread did not terminate within the timeout.", LOG_LEVEL_WARNING)
+        
+        # Join the event_processor_thread to ensure it has completed
+        if self.event_processor_thread is not None:
+            self.event_processor_thread.join(timeout=5)
+            if self.event_processor_thread.is_alive():
+                log_message("Warning: event_processor_thread did not terminate within the timeout.", LOG_LEVEL_WARNING)
+        
+        # Close the telnet connection properly
         if self.telnet_connection:
             try:
                 self.telnet_connection.write(TELNET_UNSUBSCRIBE_COMMAND)  # Unsubscribe from playlist events
@@ -191,7 +209,9 @@ class TelnetHandler:
             except Exception as e:
                 log_message(f"Error closing telnet connection: {e}", LOG_LEVEL_ERROR)
                 log_exception(e)
-        self.telnet_connection = None  # Ensure the connection is set to None
+        
+        # Ensure the telnet connection is set to None
+        self.telnet_connection = None
 
 # Instantiate the TelnetHandler
 telnet_handler = TelnetHandler()
