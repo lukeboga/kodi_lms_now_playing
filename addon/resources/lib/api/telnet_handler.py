@@ -73,7 +73,7 @@ class TelnetHandler:
         """
         Handle the received event data.
         Args:
-            event_data (str): The event data to handle.
+            event_data (dict): The event data to handle.
         """
         # Ensure xbmc is imported within the thread context
         try:
@@ -111,6 +111,24 @@ class TelnetHandler:
             for event_data in batch_events:
                 self.handle_event(event_data)
 
+    def format_event_response(self, response):
+        """
+        Format the raw response into a dictionary with query, param, and data.
+        Args:
+            response (bytes): The raw response from the telnet connection.
+        Returns:
+            dict: The formatted event data.
+        """
+        parts = response.decode('utf-8').strip().split(' ')
+        
+        if len(parts) >= 3:
+            query = parts[1]
+            param = parts[2]
+            data = ' '.join(parts[3:])
+            data_decoded = unquote(data)
+            return { 'query': query, 'param': param, 'data': data_decoded }
+        return None
+
     def subscribe_to_events(self, tn):
         """
         Subscribe to events from the LMS server and add them to the event queue.
@@ -120,15 +138,10 @@ class TelnetHandler:
         while not self.stop_event.is_set():
             try:
                 response = tn.read_until(b"\n")
-                parts = response.decode('utf-8').strip().split(' ')
+                event_dict = self.format_event_response(response)
                 
-                if len(parts) >= 3:
-                    query = parts[1]
-                    param = parts[2]
-                    data = ' '.join(parts[3:])
-                    data_decoded = unquote(data)
-                    event_dict = { 'query': query, 'param': param, 'data': data_decoded }
-                    
+                if event_dict:
+                    log_message(f"New response: {event_dict['query']}, {event_dict['param']}, {event_dict['data']}")
                     self.event_queue.put(event_dict)  # Blocking behavior when the queue is full
             except (EOFError, AttributeError):
                 if self.stop_event.is_set():

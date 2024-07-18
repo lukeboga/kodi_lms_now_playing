@@ -1,5 +1,6 @@
 import xbmc
 import traceback
+import os  # Import os module to use os.path.basename
 from resources.lib.utils.constants import LOG_LEVEL_ERROR, LOG_MSG_FORMAT, LOG_ERROR_MSG_FORMAT
 
 def log_message(message, level=xbmc.LOGINFO):
@@ -14,6 +15,7 @@ def log_message(message, level=xbmc.LOGINFO):
         # Extract the current file name and line number
         stack = traceback.extract_stack()
         filename, lineno, _, _ = stack[-2]
+        filename = os.path.basename(filename)  # Get only the filename
         
         # Format the log message with file name and line number
         formatted_message = LOG_MSG_FORMAT.format(filename=filename, lineno=lineno, message=message)
