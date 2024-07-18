@@ -61,12 +61,12 @@ def __init__(self):
 
 - **UI Updates**: The `update_ui_callback` attribute is set up to store a callback function, which will be called in the `handle_event` method to update the UI.
 
-### `set_update_ui_callback` Method
+# `set_update_ui_callback` Method
 
-#### Purpose:
+## Purpose:
 The `set_update_ui_callback` method is used to set a callback function that will be called to update the user interface (UI) whenever new event data is processed.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def set_update_ui_callback(self, callback):
@@ -78,7 +78,7 @@ def set_update_ui_callback(self, callback):
     self.update_ui_callback = callback
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Definition**:
    - The method is defined with `self` and `callback` as parameters.
@@ -92,7 +92,7 @@ def set_update_ui_callback(self, callback):
    - The line `self.update_ui_callback = callback` assigns the passed `callback` function to the `update_ui_callback` attribute of the instance.
    - **Concept**: This allows the class to store the callback function and call it later when needed. By using a callback, the class can notify other parts of the application about new events or data.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **Initialization**: This method is typically called during the initialization or setup phase of the application, after creating an instance of `TelnetHandler`. For example, it might be called in the `__init__` method of another class that uses `TelnetHandler`.
 
@@ -110,12 +110,12 @@ def set_update_ui_callback(self, callback):
    ```
 
 
-### `connect_to_lms` Method
+# `connect_to_lms` Method
 
-#### Purpose:
+## Purpose:
 The `connect_to_lms` method establishes a Telnet connection to the LMS (Logitech Media Server). This connection is necessary for subscribing to events and receiving data from the server.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def connect_to_lms(self):
@@ -148,7 +148,7 @@ def connect_to_lms(self):
     return tn
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Retrieve Configuration Settings**:
    ```python
@@ -205,19 +205,19 @@ def connect_to_lms(self):
    - **Concept**: Once a connection is successfully established, it is stored in the `self.telnet_connection` attribute and returned.
    - **Reasoning**: This allows other methods in the class to use the established connection.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`subscribe_to_events`**: This method calls `connect_to_lms` to get the Telnet connection before subscribing to events.
 - **`start_telnet_subscriber`**: This method starts the thread that runs `subscribe_to_events`, which in turn uses `connect_to_lms` to establish the connection.
 - **Error Handling**: If the connection fails, the method logs the error and retries, ensuring robustness and reliability in establishing the connection.
 
 
-### `subscribe_to_events` Method
+# `subscribe_to_events` Method
 
-#### Purpose:
+## Purpose:
 The `subscribe_to_events` method subscribes to events from the LMS (Logitech Media Server) using the established Telnet connection and adds these events to the event queue for further processing.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def subscribe_to_events(self, tn):
@@ -249,7 +249,7 @@ def subscribe_to_events(self, tn):
             tn = self.connect_to_lms()
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -324,7 +324,7 @@ def subscribe_to_events(self, tn):
    - **Concept**: The method handles `EOFError` and `AttributeError` exceptions, which may occur during the read operation.
    - **Reasoning**: If an exception occurs and the `stop_event` is not set, the method logs a warning and attempts to reconnect to the LMS server. This ensures robustness and resilience in maintaining the connection.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`connect_to_lms`**: This method is called within `subscribe_to_events` to establish or re-establish the Telnet connection as needed.
 - **`format_event_response`**: This method is used to format the raw response into a structured dictionary.
@@ -332,12 +332,12 @@ def subscribe_to_events(self, tn):
 - **`close_telnet_connection`**: This method sets the `stop_event`, signaling `subscribe_to_events` to stop its loop and exit gracefully.
 
 
-### `process_event` Method
+# `process_event` Method
 
-#### Purpose:
+## Purpose:
 The `process_event` method processes the most recent event data from the event queue. It attempts to collect events in batches and handles them appropriately.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def process_event(self):
@@ -366,7 +366,7 @@ def process_event(self):
             self.handle_event(event_data)
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -432,19 +432,19 @@ def process_event(self):
    - **Concept**: The method processes each event in the `batch_events` list using the `handle_event` method.
    - **Reasoning**: Processing events in batches improves efficiency and ensures that all collected events are handled, even if fewer than `batch_size` events are available.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`subscribe_to_events`**: This method adds events to the `event_queue`, which `process_event` then processes.
 - **`handle_event`**: This method is called for each event in the batch to handle the event's specific logic.
 - **`close_telnet_connection`**: This method sets the `stop_event`, signaling `process_event` to stop its loop and exit gracefully.
 
 
-### `connect_to_lms` Method
+# `connect_to_lms` Method
 
-#### Purpose:
+## Purpose:
 The `connect_to_lms` method establishes a Telnet connection to the LMS server using the configuration settings. It ensures the connection is successfully made, and if it fails, it retries until a connection is established or the `stop_event` is set.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def connect_to_lms(self):
@@ -477,7 +477,7 @@ def connect_to_lms(self):
     return tn
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -546,19 +546,19 @@ def connect_to_lms(self):
    - **Concept**: Once a Telnet connection is successfully established, the connection instance (`tn`) is assigned to the `telnet_connection` attribute of the class, and the connection instance is returned.
    - **Reasoning**: Storing the connection instance in an attribute allows other methods to use this connection. Returning the instance allows the method that called `connect_to_lms` to use the connection immediately.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`start_telnet_subscriber`**: This method calls `connect_to_lms` to establish the connection before starting the subscriber thread.
 - **`subscribe_to_events`**: This method uses the established Telnet connection to read events from the LMS server.
 - **`close_telnet_connection`**: This method ensures the Telnet connection is properly closed during shutdown.
 
 
-### `subscribe_to_events` Method
+# `subscribe_to_events` Method
 
-#### Purpose:
+## Purpose:
 The `subscribe_to_events` method reads events from the LMS server through the established Telnet connection and adds these events to the event queue for further processing.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def subscribe_to_events(self, tn):
@@ -590,7 +590,7 @@ def subscribe_to_events(self, tn):
             tn = self.connect_to_lms()
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -662,7 +662,7 @@ def subscribe_to_events(self, tn):
    - **Concept**: The method handles connection errors (EOFError or AttributeError) by attempting to reconnect to the LMS server.
    - **Reasoning**: This ensures that the method can recover from temporary connection issues and continue subscribing to events.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`connect_to_lms`**: If the connection is lost, `subscribe_to_events` calls `connect_to_lms` to re-establish the connection.
 - **`format_event_response`**: This method is used to convert raw responses into structured dictionaries for easier processing.
@@ -670,12 +670,12 @@ def subscribe_to_events(self, tn):
 - **`close_telnet_connection`**: Ensures this method stops reading events when the application is shutting down.
 
 
-### `process_event` Method
+# `process_event` Method
 
-#### Purpose:
+## Purpose:
 The `process_event` method processes events from the event queue in batches. It handles each event by calling the `handle_event` method, ensuring the application reacts to the events appropriately.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def process_event(self):
@@ -704,7 +704,7 @@ def process_event(self):
             self.handle_event(event_data)
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -763,19 +763,19 @@ def process_event(self):
    - **Concept**: The method processes each collected event by calling `handle_event`.
    - **Reasoning**: This ensures that each event is handled appropriately, allowing the application to react to the events.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`handle_event`**: This method is called for each event to handle it appropriately, such as updating the UI.
 - **`subscribe_to_events`**: This method adds events to the event queue, which `process_event` processes.
 - **`close_telnet_connection`**: This method ensures `process_event` stops processing events when the application is shutting down.
 
 
-### `handle_event` Method
+# `handle_event` Method
 
-#### Purpose:
+## Purpose:
 The `handle_event` method processes individual event data. It fetches the latest LMS (Logitech Media Server) data and updates the UI if a callback is set.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def handle_event(self, event_data):
@@ -801,7 +801,7 @@ def handle_event(self, event_data):
     self.debounce_timer = None
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -847,19 +847,19 @@ def handle_event(self, event_data):
    - **Concept**: Reset the debounce timer.
    - **Reasoning**: Clearing the debounce timer ensures that subsequent events are not delayed unnecessarily.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`process_event`**: This method calls `handle_event` for each event data processed. Understanding `handle_event` is crucial for comprehending how events are handled within the `process_event` method.
 - **`set_update_ui_callback`**: This method sets the `update_ui_callback` used in `handle_event`. The callback mechanism is crucial for updating the UI based on the latest LMS data.
 - **`fetch_lms_status`**: This method retrieves the LMS data needed by `handle_event` to update the UI.
 
 
-### `subscribe_to_events` Method
+# `subscribe_to_events` Method
 
-#### Purpose:
+## Purpose:
 The `subscribe_to_events` method connects to the LMS (Logitech Media Server), listens for events, formats them, and adds relevant events to the event queue for processing.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def subscribe_to_events(self, tn):
@@ -891,7 +891,7 @@ def subscribe_to_events(self, tn):
             tn = self.connect_to_lms()
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -954,7 +954,7 @@ def subscribe_to_events(self, tn):
    - **Concept**: Handle connection issues.
    - **Reasoning**: If the connection is lost, the method attempts to reconnect to the LMS server. This ensures continuous operation even if temporary connection issues occur.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`connect_to_lms`**: This method is called to establish a new connection if the current one fails. It ensures continuous operation by reconnecting to the LMS server.
 - **`format_event_response`**: This method is used to convert raw responses into a structured dictionary, making it easier to work with the event data.
@@ -962,12 +962,12 @@ def subscribe_to_events(self, tn):
 - **`start_telnet_subscriber`**: This method starts the `subscribe_to_events` method in a separate thread, ensuring that event subscription runs concurrently with other operations.
 
 
-### `process_event` Method
+# `process_event` Method
 
-#### Purpose:
+## Purpose:
 The `process_event` method processes the events that have been added to the event queue by the `subscribe_to_events` method.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def process_event(self):
@@ -996,7 +996,7 @@ def process_event(self):
             self.handle_event(event_data)
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -1055,7 +1055,7 @@ def process_event(self):
    - **Concept**: Iterate through the collected events and handle each one.
    - **Reasoning**: This ensures that all events in the batch are processed.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`subscribe_to_events`**: This method adds events to the queue, which `process_event` then processes.
 - **`handle_event`**: This method is called within `process_event` to handle each event. Understanding `handle_event` is essential for understanding what actions are taken when an event is processed.
@@ -1063,12 +1063,12 @@ def process_event(self):
 - **`close_telnet_connection`**: This method ensures that `stop_event` is set, signaling `process_event` to stop processing and exit the loop. Proper shutdown is crucial for preventing resource leaks and ensuring a clean exit.
 
 
-### `handle_event` Method
+# `handle_event` Method
 
-#### Purpose:
+## Purpose:
 The `handle_event` method is responsible for handling the event data that is processed by the `process_event` method. This involves fetching updated data from the LMS (Logitech Media Server) and triggering a UI update callback if it is set.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def handle_event(self, event_data):
@@ -1094,7 +1094,7 @@ def handle_event(self, event_data):
     self.debounce_timer = None
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -1140,19 +1140,19 @@ def handle_event(self, event_data):
    - **Concept**: Clear the debounce timer by setting it to `None`.
    - **Reasoning**: Resetting the debounce timer ensures that the UI update is not delayed unnecessarily by previous debounce timers.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`process_event`**: Calls `handle_event` for each event in the batch. Understanding `handle_event` helps to understand the final step in the event processing pipeline.
 - **`fetch_lms_status`**: The `fetch_lms_status` function is crucial for retrieving the current LMS data, which `handle_event` uses to update the UI.
 - **`set_update_ui_callback`**: This method assigns the `update_ui_callback`, which `handle_event` uses to update the UI. If this callback isn't set, `handle_event` won't trigger any UI updates.
 - **`start_telnet_subscriber`**: Starts the `process_event` method, which eventually calls `handle_event`. Together, these methods ensure that events are processed and the UI is updated accordingly.
 
-### `format_event_response` Method
+# `format_event_response` Method
 
-#### Purpose:
+## Purpose:
 The `format_event_response` method is responsible for formatting the raw response from the telnet connection into a structured dictionary with keys `query`, `param`, and `data`. This makes it easier to handle and process the data in subsequent methods.
 
-#### Code Breakdown:
+## Code Breakdown:
 
 ```python
 def format_event_response(self, response):
@@ -1174,7 +1174,7 @@ def format_event_response(self, response):
     return None
 ```
 
-#### Explanation and Concepts:
+## Explanation and Concepts:
 
 1. **Method Signature and Docstring**:
    ```python
@@ -1234,13 +1234,9 @@ def format_event_response(self, response):
    - **Concept**: Return `None` if the `parts` list does not contain at least three elements.
    - **Reasoning**: Avoid processing incomplete data.
 
-#### How This Method Relates to Other Methods:
+## How This Method Relates to Other Methods:
 
 - **`subscribe_to_events`**: Calls `format_event_response` to convert the raw response into a structured format before adding it to the event queue.
 - **`process_event` and `handle_event`**: Use the formatted event data. Understanding the structure of the data helps in processing and handling it correctly.
 - **`connect_to_lms`**: Establishes the telnet connection that receives the raw response processed by `format_event_response`.
-
-### Next Steps:
-
-The next method to examine is `subscribe_to_events`. This method subscribes to events from the LMS server and adds them to the event queue. Understanding this method is crucial as it deals with receiving raw data from the telnet connection and preparing it for processing.
 
