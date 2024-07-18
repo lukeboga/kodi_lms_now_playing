@@ -127,14 +127,7 @@ class TelnetHandler:
                     param = parts[2]
                     data = ' '.join(parts[3:])
                     data_decoded = unquote(data)
-
-                    log_message(f"Query: {query} | Param {param} | Data {data_decoded}")
-                    
-                    event_dict = {
-                        'query': query,
-                        'param': param,
-                        'data': data_decoded
-                    }
+                    event_dict = { 'query': query, 'param': param, 'data': data_decoded }
                     
                     self.event_queue.put(event_dict)  # Blocking behavior when the queue is full
             except (EOFError, AttributeError):
