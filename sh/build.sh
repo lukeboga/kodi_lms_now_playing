@@ -1,6 +1,5 @@
 #!/bin/bash
 
-version="v0.0.1"
 home_dir="/home/$USER"
 kodi_dir="$home_dir/_Tmp"
 project_dir="$home_dir/Development/Kodi/kodi_lms_now_playing"
@@ -19,7 +18,7 @@ case "$1" in
 esac
 
 build_dir="$project_dir/build/$build_sub_dir"
-addon_name="klms-addon-$version-$timestamp"
+addon_name="klms-addon-$timestamp"
 temp_build_dir="$build_dir/$addon_name"
 zip_name="$addon_name.zip"
 
