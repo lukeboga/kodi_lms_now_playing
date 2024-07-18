@@ -29,6 +29,8 @@ class AddonMonitor(xbmc.Monitor):
         try:
             log_message(INIT_MSG_START, LOG_LEVEL_INFO)
             global_config.settings = read_settings()
+            # Inhibit screensaver to keep the display awake
+            xbmc.executebuiltin('InhibitScreensaver(true)')
             # Add other initialization tasks here
             telnet_handler.start_telnet_subscriber()
             log_message(INIT_MSG_COMPLETE, LOG_LEVEL_INFO)
@@ -42,3 +44,4 @@ class AddonMonitor(xbmc.Monitor):
         """
         log_message(ABORT_MSG, LOG_LEVEL_INFO)
         shutdown_addon()
+
