@@ -142,7 +142,9 @@ class TelnetHandler:
         """
         while not self.stop_event.is_set():
             try:
-                response = tn.read_until(b"\n")
+                response = tn.read_until(b"\n", timeout=1)  # Use timeout to periodically check stop_event
+                if self.stop_event.is_set():
+                    break
                 event_dict = self.format_event_response(response)
 
                 if event_dict:
