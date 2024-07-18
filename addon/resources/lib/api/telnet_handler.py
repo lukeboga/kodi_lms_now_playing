@@ -24,7 +24,7 @@ class TelnetHandler:
     def __init__(self):
         self.telnet_connection = None
         self.subscriber_thread = None
-        self.event_queue = Queue()
+        self.event_queue = Queue(maxsize=5)  # Bounded queue with max size of 5
         self.debounce_timer = None
         self.update_ui_callback = None
         self.stop_event = threading.Event()
@@ -118,7 +118,7 @@ class TelnetHandler:
         while not self.stop_event.is_set():
             try:
                 response = tn.read_until(b"\n")
-                self.event_queue.put(response.decode('utf-8'))
+                self.event_queue.put(response.decode('utf-8'))  # Blocking behavior when the queue is full
             except (EOFError, AttributeError):
                 if self.stop_event.is_set():
                     break
