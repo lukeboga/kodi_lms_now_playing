@@ -30,6 +30,7 @@ class TelnetHandler:
         self.update_ui_callback = None
         self.stop_event = threading.Event()
         self.event_processor_thread = None
+        self.event_available = threading.Event()  # Event to signal new data availability
 
     def set_update_ui_callback(self, callback):
         """
@@ -96,6 +97,11 @@ class TelnetHandler:
         """
         batch_size = BATCH_SIZE
         while not self.stop_event.is_set():
+            self.event_available.wait(timeout=1)  # Wait for the event signal or timeout
+            if self.stop_event.is_set():
+                break
+            self.event_available.clear()  # Reset the event
+            
             batch_events = []
             try:
                 # Attempt to collect up to batch_size events
@@ -147,6 +153,7 @@ class TelnetHandler:
                     if query == 'playlist' and param == 'newsong':
                         log_message(f"New response: {query}, {param}, {data}")
                         self.event_queue.put(event_dict)
+                        self.event_available.set()  # Signal that new data is available
             except (EOFError, AttributeError):
                 if self.stop_event.is_set():
                     break
@@ -175,6 +182,7 @@ class TelnetHandler:
         Close the telnet connection and unsubscribe from events.
         """
         self.stop_event.set()
+        self.event_available.set()  # Ensure the event processor wakes up to exit
         if self.telnet_connection:
             try:
                 self.telnet_connection.write(TELNET_UNSUBSCRIBE_COMMAND)  # Unsubscribe from playlist events
