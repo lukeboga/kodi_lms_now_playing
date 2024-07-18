@@ -106,3 +106,9 @@ SETTINGS_ERROR_MSG = "Error reading settings: {error}"
 # NowPlaying Window Filename
 NOW_PLAYING_XML = "NowPlaying.xml"
 
+# Event Queue Timeout in seconds
+EVENT_QUEUE_TIMEOUT = 1
+
+# Batch size for processing events
+BATCH_SIZE = 10
+

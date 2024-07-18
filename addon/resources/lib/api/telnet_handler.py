@@ -1,7 +1,7 @@
 import time
 import threading
 import xbmc
-from queue import Queue, Empty
+from queue import Queue, Empty, Full
 from resources.lib.utils.read_settings import read_settings
 from resources.lib.utils.log_message import log_message
 from resources.lib.utils.error_handling import log_exception
@@ -9,15 +9,17 @@ from resources.lib.deps import telnetlib
 from resources.lib.api.fetch_lms_status import fetch_lms_status
 from resources.lib.utils.network_utils import is_port_open, log_network_issue
 from resources.lib.utils.constants import (
+    BATCH_SIZE,
+    DEBOUNCE_TIME,
+    EVENT_QUEUE_TIMEOUT,
     LMS_SERVER_KEY,
     LMS_TELNET_PORT_KEY,
+    LOG_LEVEL_ERROR,
     LOG_LEVEL_INFO,
     LOG_LEVEL_WARNING,
-    LOG_LEVEL_ERROR,
+    RETRY_INTERVAL,
     TELNET_SUBSCRIBE_COMMAND,
-    TELNET_UNSUBSCRIBE_COMMAND,
-    DEBOUNCE_TIME,
-    RETRY_INTERVAL
+    TELNET_UNSUBSCRIBE_COMMAND
 )
 
 class TelnetHandler:
@@ -81,7 +83,6 @@ class TelnetHandler:
 
         # Fetch LMS data
         lms_data = fetch_lms_status()
-        log_message(f"Received event: {event_data}", LOG_LEVEL_INFO)
 
         # Trigger the UI update callback if it's set
         if self.update_ui_callback:
@@ -94,20 +95,21 @@ class TelnetHandler:
         """
         Process the most recent event data from the queue.
         """
+        batch_size = BATCH_SIZE
         while not self.stop_event.is_set():
+            batch_events = []
             try:
-                # Wait for an event with a timeout to allow thread to exit cleanly
-                event_data = self.event_queue.get(timeout=1)
-                if event_data:
-                    # Cancel any existing timer
-                    if self.debounce_timer:
-                        self.debounce_timer.cancel()
-
-                    # Start a new timer
-                    self.debounce_timer = threading.Timer(DEBOUNCE_TIME, self.handle_event, args=(event_data,))  # 1-second debounce time
-                    self.debounce_timer.start()
+                # Attempt to collect up to batch_size events
+                for _ in range(batch_size):
+                    event_data = self.event_queue.get(timeout=EVENT_QUEUE_TIMEOUT)
+                    batch_events.append(event_data)
             except Empty:
-                continue
+                # If the queue is empty before collecting batch_size events, continue
+                pass
+
+            # Process the collected events, even if fewer than batch_size
+            for event_data in batch_events:
+                self.handle_event(event_data)
 
     def subscribe_to_events(self, tn):
         """
@@ -118,7 +120,7 @@ class TelnetHandler:
         while not self.stop_event.is_set():
             try:
                 response = tn.read_until(b"\n")
-                self.event_queue.put(response.decode('utf-8'))  # Blocking behavior when the queue is full
+                self.event_queue.put(response.decode('utf-8'))
             except (EOFError, AttributeError):
                 if self.stop_event.is_set():
                     break
