@@ -1,15 +1,9 @@
-import xbmc
 import xbmcaddon
 from resources.lib.utils.log_message import log_message
 from resources.lib.ui.now_playing import NowPlaying
 from resources.lib.utils.addon_monitor import AddonMonitor
 from resources.lib.utils.shutdown_handler import shutdown_addon  # Import the shutdown function
-from resources.lib.utils.constants import (
-    LOG_LEVEL_ERROR,
-    NOW_PLAYING_XML,
-    LOG_MSG_FORMAT,
-    ADDON_NAME
-)
+from resources.lib.utils.constants import LOG_LEVEL_ERROR, NOW_PLAYING_XML
 
 def main():
     """

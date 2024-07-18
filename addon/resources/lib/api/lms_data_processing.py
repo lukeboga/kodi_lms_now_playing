@@ -1,12 +1,9 @@
-import xbmc
-import json
 from resources.lib.utils.log_message import log_message
-from resources.lib.utils.read_settings import read_settings
+import resources.lib.utils.global_config as global_config
 from resources.lib.utils.error_handling import log_exception
 from resources.lib.utils.constants import (
     LMS_SERVER_KEY,
     LMS_PORT_KEY,
-    LOG_LEVEL_INFO,
     LOG_LEVEL_ERROR,
     LMS_RESULT_KEY,
     LMS_PLAYLIST_LOOP_KEY,
@@ -23,7 +20,7 @@ def get_now_playing(data):
     Returns:
         dict: A dictionary containing the organized 'now playing' information.
     """
-    settings = read_settings()
+    settings = global_config.settings
     
     try:
         track_info = data[LMS_RESULT_KEY][LMS_PLAYLIST_LOOP_KEY][0]

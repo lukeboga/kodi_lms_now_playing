@@ -1,7 +1,9 @@
-import xbmc  # Kodi API module for logging and monitoring
-from resources.lib.utils.log_message import log_message  # Custom function for logging messages
-from resources.lib.api.telnet_handler import telnet_handler  # Import the telnet handler instance
-from resources.lib.utils.read_settings import read_settings  # Import the settings reader function
+import xbmc
+from resources.lib.utils.log_message import log_message
+from resources.lib.api.telnet_handler import telnet_handler
+from resources.lib.utils.read_settings import read_settings
+from resources.lib.utils.shutdown_handler import shutdown_addon
+import resources.lib.utils.global_config as global_config
 from resources.lib.utils.constants import (
     LOG_LEVEL_INFO,
     LOG_LEVEL_ERROR,
@@ -9,7 +11,6 @@ from resources.lib.utils.constants import (
     INIT_MSG_COMPLETE,
     ABORT_MSG
 )
-from resources.lib.utils.shutdown_handler import shutdown_addon  # Import the shutdown function
 
 class AddonMonitor(xbmc.Monitor):
     """
@@ -18,7 +19,6 @@ class AddonMonitor(xbmc.Monitor):
 
     def __init__(self):
         super().__init__()
-        self.settings = None
         self.initialize()
 
     def initialize(self):
@@ -28,7 +28,7 @@ class AddonMonitor(xbmc.Monitor):
         """
         try:
             log_message(INIT_MSG_START, LOG_LEVEL_INFO)
-            self.settings = read_settings()
+            global_config.settings = read_settings()
             # Add other initialization tasks here
             telnet_handler.start_telnet_subscriber()
             log_message(INIT_MSG_COMPLETE, LOG_LEVEL_INFO)
@@ -42,4 +42,3 @@ class AddonMonitor(xbmc.Monitor):
         """
         log_message(ABORT_MSG, LOG_LEVEL_INFO)
         shutdown_addon()
-

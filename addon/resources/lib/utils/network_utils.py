@@ -4,7 +4,6 @@ from requests.packages.urllib3.util.retry import Retry
 import socket
 from contextlib import closing
 from resources.lib.utils.log_message import log_message
-import xbmc  # Ensure xbmc is imported for logging levels
 from resources.lib.utils.constants import (
     RETRY_COUNT,
     BACKOFF_FACTOR,

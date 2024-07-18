@@ -1,13 +1,9 @@
-import xbmc
 import xbmcgui
 from resources.lib.api.fetch_lms_status import fetch_lms_status
-from resources.lib.api.lms_data_processing import get_now_playing, get_playlist
-from resources.lib.utils.log_message import log_message
-from resources.lib.api.telnet_handler import telnet_handler  # Import the telnet handler instance
-from resources.lib.ui.ui_updates import update_now_playing, update_playlist  # Import the UI update functions
-from resources.lib.utils.shutdown_handler import shutdown_addon  # Import the shutdown function
+from resources.lib.api.telnet_handler import telnet_handler
+from resources.lib.ui.ui_updates import update_now_playing, update_playlist
+from resources.lib.utils.shutdown_handler import shutdown_addon
 from resources.lib.utils.constants import (
-    LOG_LEVEL_INFO,
     CONTROL_ID_ARTWORK_BACKGROUND,
     CONTROL_ID_ARTWORK,
     CONTROL_ID_NOW_PLAYING_TITLE,

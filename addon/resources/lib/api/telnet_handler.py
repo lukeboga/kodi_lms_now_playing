@@ -1,9 +1,8 @@
 import time
 import threading
 from urllib.parse import unquote
-import xbmc
 from queue import Queue, Empty
-from resources.lib.utils.read_settings import read_settings
+import resources.lib.utils.global_config as global_config
 from resources.lib.utils.log_message import log_message
 from resources.lib.utils.error_handling import log_exception
 from resources.lib.deps import telnetlib
@@ -46,7 +45,7 @@ class TelnetHandler:
         Returns:
             telnetlib.Telnet: A telnet connection instance.
         """
-        settings = read_settings()
+        settings = global_config.settings
         host = settings[LMS_SERVER_KEY]
         port = int(settings[LMS_TELNET_PORT_KEY])  # Convert port to integer
         tn = None

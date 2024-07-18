@@ -1,4 +1,3 @@
-import xbmc
 from resources.lib.api.fetch_lms_status import requests_session  # Import the global requests session
 from resources.lib.api.telnet_handler import telnet_handler  # Import the telnet handler instance
 from resources.lib.utils.log_message import log_message  # Custom function for logging messages

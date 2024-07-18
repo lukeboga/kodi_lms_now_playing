@@ -1,6 +1,6 @@
 import xbmc
 import traceback
-import os  # Import os module to use os.path.basename
+import os
 from resources.lib.utils.constants import LOG_LEVEL_ERROR, LOG_MSG_FORMAT, LOG_ERROR_MSG_FORMAT
 
 def log_message(message, level=xbmc.LOGINFO):

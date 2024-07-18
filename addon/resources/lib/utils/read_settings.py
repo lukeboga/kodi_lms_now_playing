@@ -1,5 +1,3 @@
-# Import necessary modules from the Kodi API
-import xbmc
 import xbmcaddon
 from resources.lib.utils.log_message import log_message
 from resources.lib.utils.constants import (

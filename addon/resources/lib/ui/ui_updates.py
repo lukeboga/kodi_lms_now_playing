@@ -1,4 +1,3 @@
-import xbmc
 import xbmcgui
 from resources.lib.api.lms_data_processing import get_now_playing, get_playlist
 from resources.lib.utils.log_message import log_message

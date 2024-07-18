@@ -1,7 +1,6 @@
 import requests
 import json
-import xbmc
-from resources.lib.utils.read_settings import read_settings
+import resources.lib.utils.global_config as global_config
 from resources.lib.utils.log_message import log_message
 from resources.lib.utils.error_handling import log_exception
 from resources.lib.utils.network_utils import create_requests_session, is_port_open, log_network_issue
@@ -28,7 +27,7 @@ def fetch_lms_status():
     Returns:
         dict: A dictionary containing the JSON response data.
     """
-    settings = read_settings()
+    settings = global_config.settings
     if not is_port_open(settings[LMS_SERVER_KEY], int(settings[LMS_PORT_KEY])):
         log_network_issue("LMS server port is not open.")
         return None
