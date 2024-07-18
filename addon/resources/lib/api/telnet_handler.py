@@ -1,7 +1,8 @@
 import time
 import threading
+from urllib.parse import unquote
 import xbmc
-from queue import Queue, Empty, Full
+from queue import Queue, Empty
 from resources.lib.utils.read_settings import read_settings
 from resources.lib.utils.log_message import log_message
 from resources.lib.utils.error_handling import log_exception
@@ -10,7 +11,6 @@ from resources.lib.api.fetch_lms_status import fetch_lms_status
 from resources.lib.utils.network_utils import is_port_open, log_network_issue
 from resources.lib.utils.constants import (
     BATCH_SIZE,
-    DEBOUNCE_TIME,
     EVENT_QUEUE_TIMEOUT,
     LMS_SERVER_KEY,
     LMS_TELNET_PORT_KEY,
@@ -120,7 +120,23 @@ class TelnetHandler:
         while not self.stop_event.is_set():
             try:
                 response = tn.read_until(b"\n")
-                self.event_queue.put(response.decode('utf-8'))
+                parts = response.decode('utf-8').strip().split(' ')
+                
+                if len(parts) >= 3:
+                    query = parts[1]
+                    param = parts[2]
+                    data = ' '.join(parts[3:])
+                    data_decoded = unquote(data)
+
+                    log_message(f"Query: {query} | Param {param} | Data {data_decoded}")
+                    
+                    event_dict = {
+                        'query': query,
+                        'param': param,
+                        'data': data_decoded
+                    }
+                    
+                    self.event_queue.put(event_dict)  # Blocking behavior when the queue is full
             except (EOFError, AttributeError):
                 if self.stop_event.is_set():
                     break
