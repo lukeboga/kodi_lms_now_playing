@@ -46,28 +46,3 @@ if __name__ == '__main__':
     """
     run_addon()
 
-"""
-Detailed Explanation for Beginners:
------------------------------------
-
-1. **Purpose of the Script:**
-   - This script serves as the main entry point for the KLMS Addon.
-
-2. **Main Function (`main`):**
-   - The `main` function is responsible for creating and displaying the `NowPlaying` window, which shows the 'now playing' information from the Logitech Media Server (LMS).
-
-3. **Run Addon Function (`run_addon`):**
-   - This function handles the initialization, running, and cleanup of the addon.
-   - It initializes the addon by creating an `AddonMonitor` instance, which also starts the telnet subscriber for receiving LMS events, and calls the `main` function to display the `NowPlaying` window.
-   - It waits for the abort request and ensures that any resources are cleaned up properly when the addon is closed.
-
-4. **Initialization Block (`if __name__ == '__main__'`):**
-   - This block is executed when the script is run directly.
-   - It calls the `run_addon` function to handle the complete lifecycle of the addon.
-
-5. **Error Handling and Logging:**
-   - The script includes error handling to log any exceptions that occur during execution, making it easier to debug issues.
-
-6. **Clean Shutdown:**
-   - The `finally` block in the `run_addon` function ensures that the addon shuts down cleanly by calling the `shutdown_addon` function.
-"""

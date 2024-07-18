@@ -109,36 +109,3 @@ def log_beautified_json(data):
     beautified_json = json.dumps(data, indent=4)
     log_message(f"Full JSON response:\n{beautified_json}", LOG_LEVEL_INFO)
 
-"""
-Detailed Explanation for Beginners:
------------------------------------
-
-1. **Importing Necessary Modules:**
-   - `json`: For handling JSON data.
-   - `xbmc`: Part of the Kodi API, used for logging.
-   - `read_settings`, `log_message`, `log_exception`: Custom utility functions for reading settings, logging messages, and logging exceptions.
-   - `create_requests_session`, `is_port_open`, `log_network_issue`: Custom network utility functions for creating a requests session, checking if a port is open, and logging network issues.
-   - `LMS_SERVER_KEY`, `LMS_PORT_KEY`, `LMS_PLAYER_ID_KEY`, `LOG_LEVEL_INFO`, `JSON_RPC_URL_TEMPLATE`, `JSON_RPC_PAYLOAD_TEMPLATE`, `CONTENT_TYPE_HEADER`: Constants imported from `constants.py`.
-
-2. **Global Session Object:**
-   - `requests_session`: A global session object for making HTTP requests with retry logic. This helps reuse the connection and improve performance.
-
-3. **fetch_lms_status Function:**
-   - **Purpose:** Fetch JSON data from the Logitech Media Server (LMS) using JSON-RPC.
-   - **Returns:** `dict`: A dictionary containing the JSON response data.
-   - **Steps:**
-     - Retrieves LMS settings using `read_settings`.
-     - Checks if the LMS server port is open using `is_port_open`.
-     - Constructs the URL and payload for the JSON-RPC request.
-     - Makes the HTTP POST request using the global session object.
-     - Parses the JSON response and logs it in a beautified format.
-     - Handles and logs any exceptions that occur during the request or data processing using `log_network_issue` and `log_exception`.
-
-4. **Helper Functions:**
-   - **construct_url:** Constructs the URL for the JSON-RPC request using LMS settings.
-   - **construct_payload:** Constructs the JSON-RPC payload using the LMS player ID.
-   - **send_request:** Sends the HTTP POST request and raises any status errors.
-   - **parse_response:** Parses the JSON response from the server.
-   - **log_beautified_json:** Logs the beautified JSON response data.
-"""
-

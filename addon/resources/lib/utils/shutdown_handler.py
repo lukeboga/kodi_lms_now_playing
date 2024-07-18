@@ -28,24 +28,3 @@ def shutdown_addon():
     except Exception as e:
         log_message(f"Shutdown error: {e}", LOG_LEVEL_ERROR)
 
-"""
-Detailed Explanation for Beginners:
------------------------------------
-
-1. **Importing Necessary Modules:**
-   - `xbmc`: Part of the Kodi API, used for logging.
-   - `requests_session`: The global requests session used for HTTP requests.
-   - `telnet_handler`: The instance of the TelnetHandler class to manage the telnet connection.
-   - `log_message`: A custom function to log messages to the Kodi log.
-   - Constants imported from `constants.py`.
-
-2. **shutdown_addon Function:**
-   - **Purpose:** This function handles the clean shutdown of the KLMS Addon by closing any open connections and cleaning up resources.
-   - **Steps:**
-     - Logs that the shutdown process has started.
-     - Closes the requests session if it is open.
-     - Closes the telnet connection using `telnet_handler.close_telnet_connection()`.
-     - Logs that the shutdown process is complete.
-     - Catches and logs any exceptions that occur during shutdown.
-"""
-
