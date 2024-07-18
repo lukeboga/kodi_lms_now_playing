@@ -612,3 +612,122 @@ def format_event_response(self, response):
 - **`process_event` and `handle_event`**: Use the formatted event data. Understanding the structure of the data helps in processing and handling it correctly.
 - **`connect_to_lms`**: Establishes the telnet connection that receives the raw response processed by `format_event_response`.
 
+# `close_telnet_connection` Method
+
+## Purpose:
+The `close_telnet_connection` method ensures that the telnet connection and all related threads, events, and resources are properly terminated and cleaned up. It ensures a graceful shutdown of the `TelnetHandler` class.
+
+## Code Breakdown:
+
+```python
+def close_telnet_connection(self):
+    """
+    Close the telnet connection and unsubscribe from events.
+    Ensure all threads, events, and resources are properly terminated and cleaned up.
+    """
+    # Set the stop event to signal all threads to stop
+    self.stop_event.set()
+    
+    # Signal the event_available to wake up the process_event method if it's waiting
+    self.event_available.set()
+    
+    # Join the subscriber_thread to ensure it has completed
+    if self.subscriber_thread is not None:
+        self.subscriber_thread.join(timeout=5)
+        if self.subscriber_thread.is_alive():
+            log_message("Warning: subscriber_thread did not terminate within the timeout.", LOG_LEVEL_WARNING)
+    
+    # Join the event_processor_thread to ensure it has completed
+    if self.event_processor_thread is not None:
+        self.event_processor_thread.join(timeout=5)
+        if self.event_processor_thread.is_alive():
+            log_message("Warning: event_processor_thread did not terminate within the timeout.", LOG_LEVEL_WARNING)
+    
+    # Close the telnet connection properly
+    if self.telnet_connection:
+        try:
+            self.telnet_connection.write(TELNET_UNSUBSCRIBE_COMMAND)  # Unsubscribe from playlist events
+            self.telnet_connection.close()
+            log_message("Telnet connection closed and unsubscribed from events.", LOG_LEVEL_INFO)
+        except Exception as e:
+            log_message(f"Error closing telnet connection: {e}", LOG_LEVEL_ERROR)
+            log_exception(e)
+    
+    # Ensure the telnet connection is set to None
+    self.telnet_connection = None
+```
+
+## Explanation and Concepts:
+
+1. **Method Signature and Docstring**:
+   ```python
+   def close_telnet_connection(self):
+       """
+       Close the telnet connection and unsubscribe from events.
+       Ensure all threads, events, and resources are properly terminated and cleaned up.
+       """
+   ```
+   - **Concept**: Define the method without parameters.
+   - **Reasoning**: This method is designed to clean up resources related to the `TelnetHandler` instance.
+
+2. **Set the `stop_event`**:
+   ```python
+   self.stop_event.set()
+   ```
+   - **Concept**: Set the `stop_event` to signal all threads to stop.
+   - **Reasoning**: This event is used to gracefully terminate the `process_event` and `subscribe_to_events` methods.
+
+3. **Signal the `event_available`**:
+   ```python
+   self.event_available.set()
+   ```
+   - **Concept**: Signal the `event_available` to wake up the `process_event` method if it is waiting.
+   - **Reasoning**: Ensure that the `process_event` method can exit the loop promptly by setting this event.
+
+4. **Join the `subscriber_thread`**:
+   ```python
+   if self.subscriber_thread is not None:
+       self.subscriber_thread.join(timeout=5)
+       if self.subscriber_thread.is_alive():
+           log_message("Warning: subscriber_thread did not terminate within the timeout.", LOG_LEVEL_WARNING)
+   ```
+   - **Concept**: If the `subscriber_thread` is running, join it with a timeout of 5 seconds to ensure it has completed.
+   - **Reasoning**: Wait for the thread to finish execution to ensure no resources are being used by it. Log a warning if it does not terminate within the timeout.
+
+5. **Join the `event_processor_thread`**:
+   ```python
+   if self.event_processor_thread is not None:
+       self.event_processor_thread.join(timeout=5)
+       if self.event_processor_thread.is_alive():
+           log_message("Warning: event_processor_thread did not terminate within the timeout.", LOG_LEVEL_WARNING)
+   ```
+   - **Concept**: If the `event_processor_thread` is running, join it with a timeout of 5 seconds to ensure it has completed.
+   - **Reasoning**: Similar to the `subscriber_thread`, ensure that this thread has completed execution. Log a warning if it does not terminate within the timeout.
+
+6. **Close the Telnet Connection**:
+   ```python
+   if self.telnet_connection:
+       try:
+           self.telnet_connection.write(TELNET_UNSUBSCRIBE_COMMAND)  # Unsubscribe from playlist events
+           self.telnet_connection.close()
+           log_message("Telnet connection closed and unsubscribed from events.", LOG_LEVEL_INFO)
+       except Exception as e:
+           log_message(f"Error closing telnet connection: {e}", LOG_LEVEL_ERROR)
+           log_exception(e)
+   ```
+   - **Concept**: If there is an active telnet connection, unsubscribe from playlist events and close the connection. Log the status or any errors that occur.
+   - **Reasoning**: Ensure that the connection is properly terminated to free up resources and avoid potential issues with open connections.
+
+7. **Set the `telnet_connection` to `None`**:
+   ```python
+   self.telnet_connection = None
+   ```
+   - **Concept**: Set the `telnet_connection` attribute to `None`.
+   - **Reasoning**: This helps ensure that the object state reflects that there is no active connection.
+
+## How This Method Relates to Other Methods:
+
+- **`__init__`**: Initializes the events and threads that need to be cleaned up by `close_telnet_connection`.
+- **`start_telnet_subscriber`**: Starts the `subscriber_thread` and `event_processor_thread` that need to be joined and terminated in `close_telnet_connection`.
+- **`subscribe_to_events` and `process_event`**: Use the `stop_event` to know when to stop execution, which is set in `close_telnet_connection`.
+
