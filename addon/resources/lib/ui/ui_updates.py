@@ -3,103 +3,97 @@ from resources.lib.api.lms_data_processing import get_now_playing, get_playlist
 from resources.lib.utils.log_message import log_message
 from resources.lib.utils.constants import (
     LOG_LEVEL_WARNING,
-    CONTROL_ID_ARTWORK_BACKGROUND,
-    CONTROL_ID_ARTWORK,
-    CONTROL_ID_NOW_PLAYING_TITLE,
-    CONTROL_ID_NOW_PLAYING_ALBUM,
-    CONTROL_ID_NOW_PLAYING_ARTIST,
-    CONTROL_ID_PLAYLIST,
     DEFAULT_ARTWORK_PATH,
     LISTITEM_ID_PREFIX
 )
 
-def update_now_playing(window, lms_data):
+def update_now_playing(el, lms_data):
     """
     Update the 'now playing' UI elements with the current track's information.
     
     Args:
-        window (xbmcgui.WindowXML): The window object containing the UI elements.
+        el (UIElements): The object containing the UI elements.
         lms_data (dict): The LMS data to use for updating the UI.
     """
     now_playing_data = get_now_playing(lms_data)
     
     if now_playing_data:
-        set_now_playing_labels(window, now_playing_data)
-        set_now_playing_artwork(window, now_playing_data['artwork_url'])
+        set_now_playing_labels(el, now_playing_data)
+        set_now_playing_artwork(el, now_playing_data['artwork_url'])
     else:
         log_message("No 'now playing' information available.", LOG_LEVEL_WARNING)
-        clear_now_playing_labels(window)
-        set_default_artwork(window)
+        clear_now_playing_labels(el)
+        set_default_artwork(el)
 
-def update_playlist(window, lms_data):
+def update_playlist(el, lms_data):
     """
     Update the playlist UI element with the current playlist's information.
     
     Args:
-        window (xbmcgui.WindowXML): The window object containing the UI elements.
+        el (UIElements): The object containing the UI elements.
         lms_data (dict): The LMS data to use for updating the UI.
     """
     playlist_data = get_playlist(lms_data)
     
     if playlist_data:
-        update_playlist_items(window, playlist_data)
+        update_playlist_items(el, playlist_data)
     else:
         log_message("No playlist information available.", LOG_LEVEL_WARNING)
 
-def set_now_playing_labels(window, now_playing_data):
+def set_now_playing_labels(el, now_playing_data):
     """
     Set the 'now playing' labels with the current track's information.
 
     Args:
-        window (xbmcgui.WindowXML): The window object containing the UI elements.
+        el (UIElements): The object containing the UI elements.
         now_playing_data (dict): The 'now playing' data to use for updating the UI.
     """
-    window.getControl(CONTROL_ID_NOW_PLAYING_TITLE).setLabel(now_playing_data['title'])
-    window.getControl(CONTROL_ID_NOW_PLAYING_ALBUM).setLabel(now_playing_data['album'])
-    window.getControl(CONTROL_ID_NOW_PLAYING_ARTIST).setLabel(now_playing_data['artist'])
+    el.now_playing_title.setLabel(now_playing_data['title'])
+    el.now_playing_artist.setLabel(now_playing_data['artist'])
+    el.now_playing_album.setLabel(now_playing_data['album'])
 
-def set_now_playing_artwork(window, artwork_url):
+def set_now_playing_artwork(el, artwork_url):
     """
     Set the 'now playing' artwork with the current track's artwork.
 
     Args:
-        window (xbmcgui.WindowXML): The window object containing the UI elements.
+        el (UIElements): The object containing the UI elements.
         artwork_url (str): The URL of the artwork to display.
     """
     artwork_url = artwork_url or DEFAULT_ARTWORK_PATH
-    window.getControl(CONTROL_ID_ARTWORK_BACKGROUND).setImage(artwork_url)
-    window.getControl(CONTROL_ID_ARTWORK).setImage(artwork_url)
+    el.artwork_background.setImage(artwork_url)
+    el.artwork.setImage(artwork_url)
 
-def clear_now_playing_labels(window):
+def clear_now_playing_labels(el):
     """
     Clear the 'now playing' labels.
 
     Args:
-        window (xbmcgui.WindowXML): The window object containing the UI elements.
+        el (UIElements): The object containing the UI elements.
     """
-    window.getControl(CONTROL_ID_NOW_PLAYING_TITLE).setLabel("")
-    window.getControl(CONTROL_ID_NOW_PLAYING_ALBUM).setLabel("")
-    window.getControl(CONTROL_ID_NOW_PLAYING_ARTIST).setLabel("")
+    el.now_playing_title.setLabel("")
+    el.now_playing_artist.setLabel("")
+    el.now_playing_album.setLabel("")
 
-def set_default_artwork(window):
+def set_default_artwork(el):
     """
     Set the default artwork.
 
     Args:
-        window (xbmcgui.WindowXML): The window object containing the UI elements.
+        el (UIElements): The object containing the UI elements.
     """
-    window.getControl(CONTROL_ID_ARTWORK_BACKGROUND).setImage(DEFAULT_ARTWORK_PATH)
-    window.getControl(CONTROL_ID_ARTWORK).setImage(DEFAULT_ARTWORK_PATH)
+    el.artwork_background.setImage(DEFAULT_ARTWORK_PATH)
+    el.artwork.setImage(DEFAULT_ARTWORK_PATH)
 
-def update_playlist_items(window, playlist_data):
+def update_playlist_items(el, playlist_data):
     """
     Update the playlist items in the UI.
 
     Args:
-        window (xbmcgui.WindowXML): The window object containing the UI elements.
+        el (UIElements): The object containing the UI elements.
         playlist_data (list): The playlist data to use for updating the UI.
     """
-    playlist_control = window.getControl(CONTROL_ID_PLAYLIST)
+    playlist_control = el.playlist
     playlist_control.reset()
     
     for index, item in enumerate(playlist_data):

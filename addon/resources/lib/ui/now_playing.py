@@ -3,6 +3,7 @@ from resources.lib.api.fetch_lms_status import fetch_lms_status
 from resources.lib.api.telnet_handler import telnet_handler
 from resources.lib.ui.ui_updates import update_now_playing, update_playlist
 from resources.lib.utils.shutdown_handler import shutdown_addon
+from resources.lib.ui.ui_elements import ui_elements
 from resources.lib.utils.constants import (
     CONTROL_ID_ARTWORK_BACKGROUND,
     CONTROL_ID_ARTWORK,
@@ -15,7 +16,8 @@ from resources.lib.utils.constants import (
 class NowPlaying(xbmcgui.WindowXML):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        telnet_handler.set_update_ui_callback(self.update_ui)  # Set the update UI callback
+        self.el = ui_elements  # Use the imported instance
+        telnet_handler.set_update_ui_callback(self.update_ui)
 
     def onInit(self):
         """
@@ -29,12 +31,12 @@ class NowPlaying(xbmcgui.WindowXML):
         """
         Initialize UI controls and populate them with data.
         """
-        self.artwork_background = self.getControl(CONTROL_ID_ARTWORK_BACKGROUND)
-        self.artwork = self.getControl(CONTROL_ID_ARTWORK)
-        self.now_playing_title = self.getControl(CONTROL_ID_NOW_PLAYING_TITLE)
-        self.now_playing_album = self.getControl(CONTROL_ID_NOW_PLAYING_ALBUM)
-        self.now_playing_artist = self.getControl(CONTROL_ID_NOW_PLAYING_ARTIST)
-        self.playlist = self.getControl(CONTROL_ID_PLAYLIST)
+        self.el.artwork_background = self.getControl(CONTROL_ID_ARTWORK_BACKGROUND)
+        self.el.artwork = self.getControl(CONTROL_ID_ARTWORK)
+        self.el.now_playing_title = self.getControl(CONTROL_ID_NOW_PLAYING_TITLE)
+        self.el.now_playing_artist = self.getControl(CONTROL_ID_NOW_PLAYING_ARTIST)
+        self.el.now_playing_album = self.getControl(CONTROL_ID_NOW_PLAYING_ALBUM)
+        self.el.playlist = self.getControl(CONTROL_ID_PLAYLIST)
 
         self.update_ui(self.lms_data)
 
@@ -45,9 +47,8 @@ class NowPlaying(xbmcgui.WindowXML):
         Args:
             lms_data (dict): The LMS data received from the telnet handler.
         """
-        self.lms_data = lms_data
-        update_now_playing(self, self.lms_data)
-        update_playlist(self, self.lms_data)
+        update_now_playing(self.el, lms_data)
+        update_playlist(self.el, lms_data)
 
     def onClick(self, controlId):
         pass

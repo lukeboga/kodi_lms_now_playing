@@ -65,18 +65,18 @@
                             <label></label>
                         </control>
                         
-                        <!-- Album  -->
+                        <!-- Artist -->
                         <control type="label" id="4">
                             <align>center</align>
-                            <top>30</top>
+                            <top>60</top>
                             
                             <label></label>
                         </control>
                         
-                        <!-- Artist -->
+                        <!-- Album  -->
                         <control type="label" id="5">
                             <align>center</align>
-                            <top>60</top>
+                            <top>30</top>
                             
                             <label></label>
                         </control>
