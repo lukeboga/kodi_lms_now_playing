@@ -139,10 +139,15 @@ class TelnetHandler:
             try:
                 response = tn.read_until(b"\n")
                 event_dict = self.format_event_response(response)
-                
+
                 if event_dict:
-                    log_message(f"New response: {event_dict['query']}, {event_dict['param']}, {event_dict['data']}")
-                    self.event_queue.put(event_dict)  # Blocking behavior when the queue is full
+                    query = event_dict['query']
+                    param = event_dict['param']
+                    data = event_dict['data']
+                
+                    if query == 'playlist' and param == 'newsong':
+                        log_message(f"New response: {query}, {param}, {data}")
+                        self.event_queue.put(event_dict)
             except (EOFError, AttributeError):
                 if self.stop_event.is_set():
                     break
